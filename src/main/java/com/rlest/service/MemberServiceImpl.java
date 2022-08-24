@@ -16,7 +16,14 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public List<Member> getMemberList() throws Exception {
+		
 		return memberDAO.getMemberList();
+	}
+
+	@Override
+	public List<Member> getMember(String email) throws Exception {
+		
+		return memberDAO.getMemeber(email);
 	}
 
 }

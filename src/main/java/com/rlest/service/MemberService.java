@@ -6,4 +6,6 @@ import com.rlest.domain.Member;
 
 public interface MemberService {
 	public List<Member> getMemberList() throws Exception;
+	
+	public List<Member> getMember(String email) throws Exception;
 }

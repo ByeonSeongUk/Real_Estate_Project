@@ -21,4 +21,10 @@ public class MemberDAOImpl implements MemberDAO {
 		return sql.selectList(NAMESPACE + ".getMemberList");
 	}
 
+	@Override
+	public List<Member> getMemeber(String email) throws Exception {
+		
+		return sql.selectOne(NAMESPACE + ".getMember");
+	}
+
 }

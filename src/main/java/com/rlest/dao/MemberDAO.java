@@ -8,4 +8,6 @@ public interface MemberDAO {
 
 	public List<Member> getMemberList() throws Exception;
 	
+	public List<Member> getMemeber(String email) throws Exception;
+	
 }

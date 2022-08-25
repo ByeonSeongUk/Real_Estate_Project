@@ -1,0 +1,19 @@
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  transpileDependencies: true,
+
+  outputDir: "../src/main/resources/static",  // 빌드 타겟 디렉토리
+  
+  //indexPath : index.html 파일이 생성될 위치
+  indexPath: "../static/index.html",
+  
+  devServer: {
+    proxy: {
+      '/api': {
+        // '/api' 로 들어오면 포트 8081(스프링 서버)로 보낸다
+        target: 'http://localhost:8081',
+        changeOrigin: true // cross origin 허용
+      }
+    }
+  }
+})

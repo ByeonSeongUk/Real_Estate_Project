@@ -10,4 +10,6 @@ public interface MemberDAO {
 	
 	public List<Member> getMemeber(String email) throws Exception;
 	
+	public void join(Member member) throws Exception;
+	
 }

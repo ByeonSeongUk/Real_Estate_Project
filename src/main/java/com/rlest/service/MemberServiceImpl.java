@@ -26,4 +26,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getMemeber(email);
 	}
 
+	@Override
+	public void join(Member member) throws Exception {
+		System.out.println("Service");
+		memberDAO.join(member);
+	}
+
 }

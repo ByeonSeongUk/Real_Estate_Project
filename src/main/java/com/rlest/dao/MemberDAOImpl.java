@@ -24,7 +24,14 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public List<Member> getMemeber(String email) throws Exception {
 		
-		return sql.selectOne(NAMESPACE + ".getMember");
+		return sql.selectOne(NAMESPACE + ".getMember", email);
+	}
+
+	@Override
+	public void join(Member member) throws Exception {
+		System.out.println("DAO");
+		sql.insert(NAMESPACE + ".join", member);
+		
 	}
 
 }

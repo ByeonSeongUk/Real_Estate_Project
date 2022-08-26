@@ -1,0 +1,244 @@
+############
+#
+# 테이블 생성
+#
+############
+
+
+
+#
+# 사용자 테이블
+#
+CREATE TABLE `Member` (
+	`email`					varchar(30)		NOT NULL					COMMENT '이메일',
+	`mmbr_pw`				varchar(64)		NOT NULL					COMMENT '사용자 비밀번호',
+	`mmbr_name`				varchar(5)		NOT NULL					COMMENT '사용자 이름',
+	`crt_id`				varchar(30)		NOT NULL					COMMENT '생성자 ID',
+	`crt_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`upd_id`				varchar(30)		NOT NULL					COMMENT '수정자 ID',
+	`upd_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '수정일시'
+);
+
+
+#
+# 중개사 테이블
+#
+CREATE TABLE `Broker` (
+	`brkr_id`				varchar(30)		NOT NULL					COMMENT '중개사 아이디',
+	`brkr_pw`				varchar(64)		NOT NULL					COMMENT '중개사 비밀번호',
+	`brkr_name`				varchar(5)		NOT NULL					COMMENT '중개사 이름',
+	`brkr_num`				varchar(16)		NOT NULL					COMMENT '중개사 등록 번호',
+	`brkr_office`			varchar(20)		NOT NULL					COMMENT '중개사무소 이름',
+	`brkr_adr`				text			NOT NULL					COMMENT '중개사무소 주소',
+	`brkr_title`			varchar(30)		NULL						COMMENT '중개사 소개 제목',
+	`brkr_intro`			varchar(300)	NULL						COMMENT '중개사 소개',
+	`brkr_phone`			varchar(11)		NOT NULL					COMMENT '중개사 전화번호',
+	`brkr_state_check`		boolean			NOT	NULL		DEFAULT false	COMMENT '계정 승인 상태',
+	`ctr_id`				varchar(30)		NOT NULL					COMMENT '생성자 ID',
+	`ctr_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`upd_id`				varchar(30)		NOT NULL					COMMENT '수정자 ID',
+	`upd_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '수정일시'
+);
+
+
+#
+# 매물 테이블
+#
+CREATE TABLE `Real_estate` (
+	`rlest_num`				int(8)			NOT NULL					COMMENT '매물 번호',
+	`brkr_id`				varchar(30)		NOT NULL					COMMENT '중개사 아이디',
+	`rlest_adr`				text			NOT NULL					COMMENT '매물의 주소',
+	`rlest_sort`			varchar(3)		NOT NULL					COMMENT '매물 구분',
+	`deposit`				int(9)			NOT NULL					COMMENT '보증금',
+	`monthly_rent`			int(7)			NOT NULL					COMMENT '월세',
+	`maintenance_charge`	int(6)			NOT NULL					COMMENT '관리비',
+	`room_area`				decimal(4, 2)	NOT NULL					COMMENT '면적',
+	`structure`				varchar(3)		NOT NULL					COMMENT '구조(오픈형, 분리형, 복층형)',
+	`floor`					varchar(3)		NOT NULL					COMMENT '층수',
+	`total_floor`			varchar(3)		NOT NULL					COMMENT '건물의 총 층수',
+	`parking_check`			boolean			NOT NULL	DEFAULT false	COMMENT '주차장 유무',
+	`elevator_check`		boolean			NOT NULL	DEFAULT false	COMMENT '엘리베이터 유무',
+	`move_in_day`			varchar(30)		NULL						COMMENT '입주 가능일',
+	`post_title`			varchar(30)		NOT NULL					COMMENT '게시물 제목',
+	`rlest_intro`			varchar(300)	NOT NULL					COMMENT '매물 상세 설명',
+	`delete_status_check`	boolean	NOT 	NULL		DEFAULT false	COMMENT '삭제 여부',
+	`crt_id`				varchar(30)		NOT NULL					COMMENT '생성자 ID',
+	`crt_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`upd_id`				varchar(30)		NOT NULL					COMMENT '수정자 ID',
+	`upd_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '수정일시'
+);
+
+
+#
+# 옵션 테이블(매물의 옵션 종류)
+#
+CREATE TABLE `About_options` (
+	`rlest_num`	int(8)		NOT NULL					COMMENT '매물 번호',
+	`opt_num`	varchar(3)	NOT NULL					COMMENT '옵션 번호(코드)',
+	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자ID',
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`upd_id`	varchar(30)	NOT NULL	    			COMMENT '수정자 ID',
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+);
+
+
+#
+# 방 사진 테이블
+#
+CREATE TABLE `Room_imgs` (
+	`img_num`	int			NOT NULL	primary key Auto_Increment	COMMENT '사진 번호',
+	`rlest_num`	int(8)		NOT NULL					COMMENT '매물 번호',
+	`file_type`	varchar(5)	NOT NULL					COMMENT '사진의 종류(대표사진, 화장실사진, 주방사진, 일반사진)',
+	`file_real_name` text 	NOT NULL					COMMENT '파일의 실제 이름',
+	`file_name`	text		NOT NULL					COMMENT '중복되지 않는 가상의 파일의 이름',
+	`file_path`	text		NOT NULL					COMMENT '파일의 저장 경로',
+	`ctr_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
+	`ctr_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`upd_id`	varchar(30)	NOT NULL					COMMENT '수정자 ID',
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+);
+
+
+#
+# 이메일 인증 테이블
+#
+CREATE TABLE `Auth_mail` (
+	`email`		varchar(30)	NOT NULL					COMMENT '이메일',
+	`auth_num`	varchar(6)	NOT NULL					COMMENT '인증번호',
+	`email_check`	boolean	NOT NULL	DEFAULT false	COMMENT '인증유무',
+	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`upd_id`	varchar(30)	NOT NULL					COMMENT '수정자 ID',
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+);
+
+
+#
+# 옵션 목록 테이블(옵션의 종류[코드로 분류])
+#
+CREATE TABLE `Options` (
+	`opt_num`	varchar(3)	NOT NULL					COMMENT '옵션 번호(코드)',
+	`opt_name`	varchar(10)	NOT NULL					COMMENT '옵션명',
+	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`upd_id`	varchar(30)	NOT NULL					COMMENT '수정자 ID',
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+);
+
+
+#
+# 위시리스트
+#
+CREATE TABLE `Wish_list` (
+	`email`	varchar(30)		NOT NULL					COMMENT '이메일',
+	`rlest_num`	int(8)		NOT NULL					COMMENT '매물 번호',
+	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시'
+);
+
+
+
+#-----------------------------------------------------------------------------
+#########
+#
+# 제약 조건
+#
+#########
+
+ALTER TABLE `Member` ADD CONSTRAINT `PK_MEMBER` PRIMARY KEY (
+	`email`
+);
+
+
+ALTER TABLE `Broker` ADD CONSTRAINT `PK_BROKER` PRIMARY KEY (
+	`brkr_id`
+);
+
+
+ALTER TABLE `Real_estate` ADD CONSTRAINT `PK_REAL_ESTATE` PRIMARY KEY (
+	`rlest_num`
+);
+
+
+ALTER TABLE `About_options` ADD CONSTRAINT `PK_ABOUT_OPTIONS` PRIMARY KEY (
+	`rlest_num`,
+	`opt_num`
+);
+
+
+ALTER TABLE `Room_imgs` ADD CONSTRAINT `PK_ROOM_IMGS` PRIMARY KEY (
+	`img_num`
+); ## 미리 지정 (Auto Increment Error : 미리 지정 안하면 오류남)
+
+
+ALTER TABLE `Auth_mail` ADD CONSTRAINT `PK_AUTH_MAIL` PRIMARY KEY (
+	`email`
+);
+
+
+ALTER TABLE `Options` ADD CONSTRAINT `PK_OPTIONS` PRIMARY KEY (
+	`opt_num`
+);
+
+
+ALTER TABLE `Wish_list` ADD CONSTRAINT `PK_WISH_LIST` PRIMARY KEY (
+	`email`,
+	`rlest_num`
+);
+
+
+ALTER TABLE `Real_Estate` ADD CONSTRAINT `FK_Broker_TO_Real_estate_1` FOREIGN KEY (
+	`brkr_id`
+)
+REFERENCES `Broker` (
+	`brkr_id`
+);
+
+
+ALTER TABLE `Room_imgs` ADD CONSTRAINT `FK_Real_Estate_TO_Romm_imgs_1` FOREIGN KEY (
+	`rlest_num`
+)
+REFERENCES `Real_Estate` (
+	`rlest_num`
+);
+
+
+ALTER TABLE `About_options` ADD CONSTRAINT `FK_Real_estate_TO_About_options_1` FOREIGN KEY (
+	`rlest_num`
+)
+REFERENCES `Real_estate` (
+	`rlest_num`
+);
+
+
+ALTER TABLE `About_options` ADD CONSTRAINT `FK_Options_TO_About_options_1` FOREIGN KEY (
+	`opt_num`
+)
+REFERENCES `Options` (
+	`opt_num`
+);
+
+
+ALTER TABLE `Auth_mail` ADD CONSTRAINT `FK_Member_TO_Auth_mail_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `Member` (
+	`email`
+);
+
+
+ALTER TABLE `Wish_list` ADD CONSTRAINT `FK_Member_TO_Wish_list_1` FOREIGN KEY (
+	`email`
+)
+REFERENCES `Member` (
+	`email`
+);
+
+
+ALTER TABLE `Wish_list` ADD CONSTRAINT `FK_Real_estate_TO_Wish_list_1` FOREIGN KEY (
+	`rlest_num`
+)
+REFERENCES `Real_estate` (
+	`rlest_num`
+);
+

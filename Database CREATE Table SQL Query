@@ -10,12 +10,12 @@
 # 사용자 테이블
 #
 CREATE TABLE `Member` (
-	`email`					varchar(30)		NOT NULL					COMMENT '이메일',
-	`mmbr_pw`				varchar(64)		NOT NULL					COMMENT '사용자 비밀번호',
-	`mmbr_name`				varchar(5)		NOT NULL					COMMENT '사용자 이름',
-	`crt_id`				varchar(30)		NOT NULL					COMMENT '생성자 ID',
+	`email`					varchar(30)		NOT NULL			COMMENT '이메일',
+	`mmbr_pw`				varchar(64)		NOT NULL			COMMENT '사용자 비밀번호',
+	`mmbr_name`				varchar(5)		NOT NULL			COMMENT '사용자 이름',
+	`crt_id`				varchar(30)		NOT NULL			COMMENT '생성자 ID',
 	`crt_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '생성일시',
-	`upd_id`				varchar(30)		NOT NULL					COMMENT '수정자 ID',
+	`upd_id`				varchar(30)		NOT NULL			COMMENT '수정자 ID',
 	`upd_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '수정일시'
 );
 
@@ -24,19 +24,19 @@ CREATE TABLE `Member` (
 # 중개사 테이블
 #
 CREATE TABLE `Broker` (
-	`brkr_id`				varchar(30)		NOT NULL					COMMENT '중개사 아이디',
-	`brkr_pw`				varchar(64)		NOT NULL					COMMENT '중개사 비밀번호',
-	`brkr_name`				varchar(5)		NOT NULL					COMMENT '중개사 이름',
-	`brkr_num`				varchar(16)		NOT NULL					COMMENT '중개사 등록 번호',
-	`brkr_office`			varchar(20)		NOT NULL					COMMENT '중개사무소 이름',
-	`brkr_adr`				text			NOT NULL					COMMENT '중개사무소 주소',
-	`brkr_title`			varchar(30)		NULL						COMMENT '중개사 소개 제목',
-	`brkr_intro`			varchar(300)	NULL						COMMENT '중개사 소개',
-	`brkr_phone`			varchar(11)		NOT NULL					COMMENT '중개사 전화번호',
-	`brkr_state_check`		boolean			NOT	NULL		DEFAULT false	COMMENT '계정 승인 상태',
-	`ctr_id`				varchar(30)		NOT NULL					COMMENT '생성자 ID',
+	`brkr_id`				varchar(30)		NOT NULL			COMMENT '중개사 아이디',
+	`brkr_pw`				varchar(64)		NOT NULL			COMMENT '중개사 비밀번호',
+	`brkr_name`				varchar(5)		NOT NULL			COMMENT '중개사 이름',
+	`brkr_num`				varchar(16)		NOT NULL			COMMENT '중개사 등록 번호',
+	`brkr_office`				varchar(20)		NOT NULL			COMMENT '중개사무소 이름',
+	`brkr_adr`				text			NOT NULL			COMMENT '중개사무소 주소',
+	`brkr_title`				varchar(30)		NULL				COMMENT '중개사 소개 제목',
+	`brkr_intro`				varchar(300)		NULL				COMMENT '중개사 소개',
+	`brkr_phone`				varchar(11)		NOT NULL			COMMENT '중개사 전화번호',
+	`brkr_state_check`			boolean			NOT NULL	DEFAULT false	COMMENT '계정 승인 상태',
+	`ctr_id`				varchar(30)		NOT NULL			COMMENT '생성자 ID',
 	`ctr_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '생성일시',
-	`upd_id`				varchar(30)		NOT NULL					COMMENT '수정자 ID',
+	`upd_id`				varchar(30)		NOT NULL			COMMENT '수정자 ID',
 	`upd_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '수정일시'
 );
 
@@ -45,26 +45,26 @@ CREATE TABLE `Broker` (
 # 매물 테이블
 #
 CREATE TABLE `Real_estate` (
-	`rlest_num`				int(8)			NOT NULL					COMMENT '매물 번호',
-	`brkr_id`				varchar(30)		NOT NULL					COMMENT '중개사 아이디',
-	`rlest_adr`				text			NOT NULL					COMMENT '매물의 주소',
-	`rlest_sort`			varchar(3)		NOT NULL					COMMENT '매물 구분',
-	`deposit`				int(9)			NOT NULL					COMMENT '보증금',
-	`monthly_rent`			int(7)			NOT NULL					COMMENT '월세',
-	`maintenance_charge`	int(6)			NOT NULL					COMMENT '관리비',
-	`room_area`				decimal(4, 2)	NOT NULL					COMMENT '면적',
-	`structure`				varchar(3)		NOT NULL					COMMENT '구조(오픈형, 분리형, 복층형)',
-	`floor`					varchar(3)		NOT NULL					COMMENT '층수',
-	`total_floor`			varchar(3)		NOT NULL					COMMENT '건물의 총 층수',
-	`parking_check`			boolean			NOT NULL	DEFAULT false	COMMENT '주차장 유무',
-	`elevator_check`		boolean			NOT NULL	DEFAULT false	COMMENT '엘리베이터 유무',
-	`move_in_day`			varchar(30)		NULL						COMMENT '입주 가능일',
-	`post_title`			varchar(30)		NOT NULL					COMMENT '게시물 제목',
-	`rlest_intro`			varchar(300)	NOT NULL					COMMENT '매물 상세 설명',
-	`delete_status_check`	boolean	NOT 	NULL		DEFAULT false	COMMENT '삭제 여부',
-	`crt_id`				varchar(30)		NOT NULL					COMMENT '생성자 ID',
+	`rlest_num`				int(8)			NOT NULL			COMMENT '매물 번호',
+	`brkr_id`				varchar(30)		NOT NULL			COMMENT '중개사 아이디',
+	`rlest_adr`				text			NOT NULL			COMMENT '매물의 주소',
+	`rlest_sort`				varchar(3)		NOT NULL			COMMENT '매물 구분',
+	`deposit`				int(9)			NOT NULL			COMMENT '보증금',
+	`monthly_rent`				int(7)			NOT NULL			COMMENT '월세',
+	`maintenance_charge`			int(6)			NOT NULL			COMMENT '관리비',
+	`room_area`				decimal(4, 2)		NOT NULL			COMMENT '면적',
+	`structure`				varchar(3)		NOT NULL			COMMENT '구조(오픈형, 분리형, 복층형)',
+	`floor`					varchar(3)		NOT NULL			COMMENT '층수',
+	`total_floor`				varchar(3)		NOT NULL			COMMENT '건물의 총 층수',
+	`parking_check`				boolean			NOT NULL	DEFAULT false	COMMENT '주차장 유무',
+	`elevator_check`			boolean			NOT NULL	DEFAULT false	COMMENT '엘리베이터 유무',
+	`move_in_day`				varchar(30)		NULL				COMMENT '입주 가능일',
+	`post_title`				varchar(30)		NOT NULL			COMMENT '게시물 제목',
+	`rlest_intro`				varchar(300)		NOT NULL			COMMENT '매물 상세 설명',
+	`delete_status_check`			boolean			NOT NULL	DEFAULT false	COMMENT '삭제 여부',
+	`crt_id`				varchar(30)		NOT NULL			COMMENT '생성자 ID',
 	`crt_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '생성일시',
-	`upd_id`				varchar(30)		NOT NULL					COMMENT '수정자 ID',
+	`upd_id`				varchar(30)		NOT NULL			COMMENT '수정자 ID',
 	`upd_dttm`				datetime		NOT NULL	DEFAULT now()	COMMENT '수정일시'
 );
 
@@ -76,9 +76,9 @@ CREATE TABLE `About_options` (
 	`rlest_num`	int(8)		NOT NULL					COMMENT '매물 번호',
 	`opt_num`	varchar(3)	NOT NULL					COMMENT '옵션 번호(코드)',
 	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자ID',
-	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
-	`upd_id`	varchar(30)	NOT NULL	    			COMMENT '수정자 ID',
-	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '생성일시',
+	`upd_id`	varchar(30)	NOT NULL	    				COMMENT '수정자 ID',
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '수정일시'
 );
 
 
@@ -86,16 +86,16 @@ CREATE TABLE `About_options` (
 # 방 사진 테이블
 #
 CREATE TABLE `Room_imgs` (
-	`img_num`	int			NOT NULL	primary key Auto_Increment	COMMENT '사진 번호',
+	`img_num`	int		NOT NULL	primary key Auto_Increment	COMMENT '사진 번호',
 	`rlest_num`	int(8)		NOT NULL					COMMENT '매물 번호',
 	`file_type`	varchar(5)	NOT NULL					COMMENT '사진의 종류(대표사진, 화장실사진, 주방사진, 일반사진)',
-	`file_real_name` text 	NOT NULL					COMMENT '파일의 실제 이름',
+	`file_real_name` text 		NOT NULL					COMMENT '파일의 실제 이름',
 	`file_name`	text		NOT NULL					COMMENT '중복되지 않는 가상의 파일의 이름',
 	`file_path`	text		NOT NULL					COMMENT '파일의 저장 경로',
 	`ctr_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
-	`ctr_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`ctr_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '생성일시',
 	`upd_id`	varchar(30)	NOT NULL					COMMENT '수정자 ID',
-	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '수정일시'
 );
 
 
@@ -105,11 +105,11 @@ CREATE TABLE `Room_imgs` (
 CREATE TABLE `Auth_mail` (
 	`email`		varchar(30)	NOT NULL					COMMENT '이메일',
 	`auth_num`	varchar(6)	NOT NULL					COMMENT '인증번호',
-	`email_check`	boolean	NOT NULL	DEFAULT false	COMMENT '인증유무',
+	`email_check`	boolean		NOT NULL	DEFAULT false			COMMENT '인증유무',
 	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
-	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '생성일시',
 	`upd_id`	varchar(30)	NOT NULL					COMMENT '수정자 ID',
-	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '수정일시'
 );
 
 
@@ -120,9 +120,9 @@ CREATE TABLE `Options` (
 	`opt_num`	varchar(3)	NOT NULL					COMMENT '옵션 번호(코드)',
 	`opt_name`	varchar(10)	NOT NULL					COMMENT '옵션명',
 	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
-	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시',
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '생성일시',
 	`upd_id`	varchar(30)	NOT NULL					COMMENT '수정자 ID',
-	`upd_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '수정일시'
+	`upd_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '수정일시'
 );
 
 
@@ -133,7 +133,7 @@ CREATE TABLE `Wish_list` (
 	`email`	varchar(30)		NOT NULL					COMMENT '이메일',
 	`rlest_num`	int(8)		NOT NULL					COMMENT '매물 번호',
 	`crt_id`	varchar(30)	NOT NULL					COMMENT '생성자 ID',
-	`crt_dttm`	datetime	NOT NULL	DEFAULT now()	COMMENT '생성일시'
+	`crt_dttm`	datetime	NOT NULL	DEFAULT now()			COMMENT '생성일시'
 );
 
 

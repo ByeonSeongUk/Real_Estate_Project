@@ -40,7 +40,7 @@
               </router-link>
 
               <button @click="getMemberList()" class="btn btn-primary" type="button" style="margin-top: 20px; background: #224CE6; border: 1px solid #224CE6; font-weight: 600">
-                axios
+                axios123123
               </button>
               <span>
                 {{connectData}}
@@ -63,8 +63,10 @@ export default {
     ,
     methods: {
       getMemberList() {
-        this.$axios.get("localhost:8081/api/memberList").then((res) => {console.log(res)})
+        this.$axios.get("api/memberList").then((res) => {this.connectData = res.data})
+        console.log('--------------');
         console.log(this.connectData);
+        console.log('==============');
       }
     },
     mounted() {

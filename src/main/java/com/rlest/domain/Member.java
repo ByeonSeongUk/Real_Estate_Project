@@ -15,6 +15,7 @@ import lombok.*;
 @ToString
 @Alias("Member")
 public class Member {
+
 	private String email;		// varchar(30)	'이메일'
 	private String mmbrPw; 		// varchar(64)	'사용자 비밀번호'
 	private String mmbrName;	// varchar(5)	'사용자 이름'
@@ -22,6 +23,5 @@ public class Member {
 	private String crtDttm;		// datetime 	'생성일시'
 	private String updId; 		// varchar(30) 	'수정자 ID'
 	private String updDttm; 	// datetime 	'수정일시'
-
 
 }

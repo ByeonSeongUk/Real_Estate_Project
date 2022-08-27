@@ -17,6 +17,7 @@ import org.apache.ibatis.type.Alias;
 @ToString
 @Alias("RealEstate")
 public class RealEstate {
+
 	private int 	rlestNum;			// int(8)	 	 '매물 번호'
 	private String 	brkrId;				// varchar(30)	 '중개사 아이디'
 	private String 	rlestAdr;			// text 		 '매물의 주소'
@@ -38,6 +39,5 @@ public class RealEstate {
 	private String 	crtDttm;			// datetime 	 '생성일시'
 	private String 	updId;				// varchar(30)	 '수정자 ID'
 	private String 	updDttm;			// datetime 	 '수정일시'
-
 
 }

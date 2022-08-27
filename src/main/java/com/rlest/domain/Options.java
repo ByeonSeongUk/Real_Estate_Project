@@ -15,6 +15,7 @@ import org.apache.ibatis.type.Alias;
 @ToString
 @Alias("Options")
 public class Options {
+
 	private String	optNum;			// varchar(3) '옵션 번호(코드)'
 	private String	optName;		// varchar(10) '옵션명'
 	private String 	crtId;			// varchar(30)	'생성자ID'

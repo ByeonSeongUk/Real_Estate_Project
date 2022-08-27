@@ -15,6 +15,7 @@ import org.apache.ibatis.type.Alias;
 @ToString
 @Alias("RoomImgs")
 public class RoomImgs {
+
 	private int 	imgNum;			// int	 		'사진 번호'
 	private int 	rlestNum;		// int(8)	 	'매물 번호'
 	private String 	fileType;		// varchar(5)	'사진의 종류(대표사진, 화장실사진, 주방사진, 일반사진)'

@@ -1,12 +1,11 @@
-<template>
+a<template>
   <div class="main">
-    <NavBar></NavBar>
+<!--    <NavBar></NavBar>-->
     <HouseMap :deposit="deposit" :monthlyRent="monthlyRent"></HouseMap>
   </div>
 </template>
 
 <script>
-import NavBar from '../components/NavBar.vue'
 import HouseMap from '../components/HouseMap.vue'
 
 export default {
@@ -20,7 +19,6 @@ export default {
   },
 
   components: {
-    NavBar,
     HouseMap
   },
   updated() {

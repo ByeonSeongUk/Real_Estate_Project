@@ -5,10 +5,10 @@
         <div class="container mainBox">
 
           <div class="row detailBar">
-            <div class="col-2">
+            <div class="col-1">
               <a @click="goBack" href="#"><img id="backBtn" src="../assets/images/backBtn.png" alt="backBtn"/></a>
             </div>
-            <div class="col-8">
+            <div class="col-9">
               <h4 id="detailHeader">OO구 OO동</h4>
             </div>
             <div class="col-2">
@@ -18,7 +18,7 @@
 
           <!-- 이미지 -->
           <div class="row">
-            <img id="mainImg" src="../assets/images/orImg24824824.jpeg">
+            <img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="../assets/images/orImg24824824.jpeg"/>
           </div>
 
           <!-- 거래 상태 / 등록일 -->
@@ -135,7 +135,7 @@
             </div>
           </div>
 
-          <div class="row infoContents">
+          <div class="row infoContents lastInfo">
             <div class="col infoHead">
               <span>주소</span>
             </div>
@@ -170,7 +170,7 @@
 
           <!-- 매물 설명 제목 -->
           <div class="row space conInfo">
-            <h3>등록한 매물 제목</h3>
+            <h3 class="intro-header">등록한 매물 제목</h3>
           </div>
 
           <!-- 매물 설명 내용 -->
@@ -185,13 +185,12 @@
 
           <!-- 중개사무소 소개 제목 -->
           <div class="row space conInfo">
-            <h3>OOOOO부동산중개사무소</h3>
-            <p>02-333-2222</p>
+            <h3 class="intro-header">OOOOO부동산중개사무소<p>02-333-2222</p></h3>
           </div>
 
           <!-- 중개사무소 소개 내용 -->
           <div class="row">
-            <div class="col contents">
+            <div class="col contents last-con">
               <p>🎪 집토스 직영부동산은 깐깐합니다.🎪<br>
                 ✅ 등기부등본을 확인해서 안전한 집✅<br>
                 🎈 건축물대장을 체크해서 자세히 기록한 집🎈<br>
@@ -213,8 +212,8 @@ export default {
     name: 'HouseDetails',
     computed: mapGetters({
       getWishList: 'getWishList'
-    }),
-
+    })
+    ,
     methods: {
       // 뒤로가기 버튼
       goBack() {
@@ -230,10 +229,10 @@ li, ul, ol {
 }
 
 #HouseDetails {
-  float: right;
-  width: 400px;
-  height: calc(100vh - 80px);;
+  width: 100%;
+  height: calc(100vh - 160px);
   overflow-y: scroll;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 #houseDetailsInfo {
@@ -241,9 +240,10 @@ li, ul, ol {
   width: 100%;
   height: 100%;
   border: 1px solid rgb(225, 225, 225);
+  box-sizing: border-box;
   background: #FFFFFF;
-  overflow-y: scroll;
 }
+
 .mainBox {
   padding: 0;
 }
@@ -260,6 +260,7 @@ li, ul, ol {
   height: 50px;
   background: #FFFFFF;
 }
+
 .detailBar > img {
   width: 30px;
   height: 30px;
@@ -279,7 +280,7 @@ li, ul, ol {
 #mainImg {
   padding: 0;
   width: 100%;
-  height: 300px;
+  height: 40vw;
 }
 
 /* 거래 상태 */
@@ -304,6 +305,7 @@ li, ul, ol {
   font-weight: bold;
   font-size: 2rem;
 }
+
 .division > p {
   font-size: 0.8rem;
   color: #777777;
@@ -315,6 +317,7 @@ li, ul, ol {
   font-size: 1.5rem;
   color: red;
 }
+
 .conHeader {
   padding-top: 10px;
 }
@@ -323,6 +326,7 @@ li, ul, ol {
   font-weight: 600;
   font-size: 1rem;
 }
+
 .conHeader > div > p {
   margin-bottom: 5px;
   font-weight: bold;
@@ -332,9 +336,10 @@ li, ul, ol {
 
 /* 매물 정보 */
 .conInfo {
-  border-top: 2px solid #F5F5F5;
+  border-top: 15px solid #F5F5F5;
   padding-top: 10px;
 }
+
 .conInfo > h3 {
   font-weight: bold;
   font-size: 1.5rem;
@@ -342,13 +347,24 @@ li, ul, ol {
 
 /* 매물 정보의 칸별 스타일 */
 .infoContents {
-  margin-top: 5px;
+  margin: 5px 10px 0 10px;
+  padding: 5px;
+  border-top: 0.5px solid rgb(225, 225, 225);
+  box-sizing: border-box;
+}
+
+.lastInfo {
+  border-bottom: 0.5px solid rgb(225, 225, 225);
+  box-sizing: border-box;
 }
 
 /* 소제목 */
 .infoHead {
   text-align: center;
+  border-right: 0.5px solid rgb(225, 225, 225);
+  box-sizing: border-box;
 }
+
 .infoHead > span {
   font-weight: bold;
 }
@@ -366,13 +382,13 @@ li, ul, ol {
 .optionList {
   float: left;
   text-align: center;
-  line-height: 55px;
+  line-height: 7.5vw;
   padding: 2px;
   margin: 0 1.25% 2% 0;
   width: 19%;
-  height: 60px;
+  height: 7.5vw;
   font-weight: 600;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #333333;
   border: 1px solid #F5F5F5;
   border-radius: 5%;
@@ -381,9 +397,26 @@ li, ul, ol {
 
 }
 
+/* 매물소개, 중개사소개 제목*/
+.intro-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(225, 225, 225);
+  box-sizing: border-box;
+}
+
+.intro-header > p {
+  float: right;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #333333;
+}
+
 /* 매물소개, 중개사소개 내용 */
 .contents p {
   padding: 0 20px;
+}
+.last-con {
+  padding-bottom: 20px;
 }
 
 </style>

@@ -21,14 +21,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<Member> getMember(String email) throws Exception {
+	public Member login(Member member) throws Exception {
 		
-		return memberDAO.getMemeber(email);
+		return memberDAO.login(member);
 	}
 
 	@Override
 	public void join(Member member) throws Exception {
-		System.out.println("Service");
 		memberDAO.join(member);
 	}
 

@@ -6,11 +6,15 @@
         </div>
 
         <div class="oneroomInfo">
-            <p class="info_content">{{getELEST.structure}} 원룸</p>
-            <h4 class="info_header">{{ getELEST.rlest_sort }} {{ getELEST.deposit }} / {{ getELEST.monthly_rent}}</h4>
-            <p class="info_content">{{getELEST.room_area}}m², {{getELEST.floor}} 층</p>
-            <p class="info_content">{{ getELEST.rlest_adr }}</p>
-            <p class="info_content">{{  getELEST.post_title }}</p>
+          <div class="wishList">
+            <a v-if="getWishList == 0" href=""><i class="fa-solid fa-heart"></i></a>
+            <a href=""><i class="fa-regular fa-heart"></i></a>
+          </div>
+          <p class="info_content">{{ getELEST.structure }} 원룸</p>
+          <h4 class="info_header">{{ getELEST.rlest_sort }} {{ getELEST.deposit }} / {{ getELEST.monthly_rent }}</h4>
+          <p class="info_content">{{ getELEST.room_area}}m², {{ getELEST.floor }} 층</p>
+          <p class="info_content">{{ getELEST.rlest_adr }}</p>
+          <p class="info_content">{{getELEST.post_title }}</p>
         </div>
     </div>
 </template>
@@ -43,16 +47,19 @@ export default {
 <style scoped>
 #HouseList {
     display: flex;
-    width: 400px;
+    width: 100%;
     height: 140px;
     padding: 10px 18px;
     background-color: white;
     border-left: 0.5px solid RGB(225, 225, 225);
 }
+#HouseList:hover {
+  background: rgb(225, 225, 225);
+}
 
 #HouseList .oneroomImg {
     display: block;
-    width: 35%;
+    width: 150px;
     height: 100%;
     margin-right: 3%;
 }
@@ -64,13 +71,13 @@ export default {
 
 #HouseList .oneroomInfo {
     display: block;
-    width: 62%;
+    width: 80%;
     height: 100%;
 }
 
 /* 부트스트랩으로 CSS충돌 떄문에 Class로 따로 잡음 */
 .info_header {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     margin: 3px 0;
     font-weight: bold;
 }
@@ -78,8 +85,6 @@ export default {
 .info_content {
     font-size: 0.8rem;
     margin: 3px 0 0 0;
-
-    /* overflow ... 처리 */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -89,6 +94,13 @@ export default {
     font-size: 0.6rem;
     color: #777;
     font-weight: 600;
+}
+
+.wishList i {
+  float: right;
+  padding-top: 7px;
+  font-size: 1.5rem;
+  color: red;
 }
 
 @media screen and (max-width: 800px) {

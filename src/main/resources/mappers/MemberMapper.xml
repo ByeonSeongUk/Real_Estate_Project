@@ -15,17 +15,29 @@
   FROM member
     </select>
     
-    <!-- 회원 불러오기 -->
-    <select id="getMember" parameterType="String" resultType="Member">
-        SELECT *
-        FROM member
-        WHERE email = #{email}
-    </select>
-    
     <!-- 회원 가입 -->
     <insert id="join">
-        INSERT INTO MEMBER
-        VALUES(#{email}, SHA2(#{mmbr_pw}, 256), #{mmbr_name}, #{crt_id}, now(), #{upd_id}, now())
+        INSERT
+        INTO MEMBER
+        VALUES(
+               #{email}
+             , SHA2(#{mmbrPw}, 256)
+             , #{mmbrName}
+             , 'admin123'
+             , now()
+             , 'admin123'
+             , now()
+             )
     </insert>
+
+    <!-- 로그인 처리 -->
+    <select id="login" parameterType="Member" resultType="Member">
+        SELECT email
+             , mmbr_name
+        FROM MEMBER
+        WHERE email   = #{email}
+        AND   mmbr_pw = SHA2(#{mmbrPw}, 256)
+
+    </select>
     
 </mapper>

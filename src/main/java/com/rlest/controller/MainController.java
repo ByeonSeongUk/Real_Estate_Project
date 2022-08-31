@@ -1,6 +1,5 @@
 package com.rlest.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -33,13 +32,12 @@ public class MainController {
 	}
 	
 
-	@GetMapping("/member/{email}")
-	public List<Member> getMember(String email) throws Exception {
-		
-		List<Member> getMember = memberService.getMember(email);
-		System.out.println(getMember);
-		
-		return getMember;
+	@PostMapping("/login")
+	public String loginAction(Member member) throws Exception {
+
+		System.out.println(member);
+//		Member memberInfo = memberService.login(member);
+		return "redirect:/";
 	}
 	
 	@PostMapping("/join")
@@ -48,6 +46,6 @@ public class MainController {
 		System.out.println(member);
 		memberService.join(member);
 		
-		return "join Success!";
+		return "redirect:/login";
 	}
 }

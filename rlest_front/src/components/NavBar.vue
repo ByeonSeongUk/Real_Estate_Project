@@ -22,7 +22,7 @@
                 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><router-link class="dropdown-item dropdown-style" to="/">방 찾기</router-link></li>
-                            <li><router-link class="dropdown-item dropdown-style" to="/login">찜한 매물</router-link></li>
+                            <li><router-link class="dropdown-item dropdown-style" to="/wishlist">찜한 매물</router-link></li>
                             <li><router-link class="dropdown-item dropdown-style" to="/registration">방 내놓기&#40;전월세만&#41;</router-link></li>
                         </ul>
                     </div>
@@ -36,10 +36,9 @@
 
         <!-- 로그인 / 회원가입 버튼 -->
         <div class="form-group loginBtn">
-            <button v-if="getLoginCheck == false" type="button" class="btn btn-secondary">
-            <router-link to="/login" class="btnStyle">로그인 및 회원가입</router-link>
-            </button>
-            <button v-if="getLoginCheck == true" type="button" class="btn btn-secondary">회원명</button>
+            <router-link v-if="getLoginCheck == false" to="/login" class="btn btn-outline-primary btnStyle">로그인 및 회원가입</router-link>
+
+            <button v-if="getLoginCheck == true" type="button" class="btn btn-outline-primary">회원명</button>
         </div>
     </div>
 </template>
@@ -68,10 +67,9 @@ export default {
 
 a {
     text-decoration: none;
-    list-style: none;
-    color: #ffffff;
     font-weight: 600;
 }
+
 
 ul, li {
     list-style: none;
@@ -84,7 +82,6 @@ ul, li {
     width: 130px;
     height: 73px;
 }
-
 
 #logoImg {
   width: 80px;

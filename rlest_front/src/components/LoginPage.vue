@@ -18,20 +18,20 @@
 
             <!-- 아이디 입력 -->
             <div class="d-grid gap-2 col-3 mx-auto">
-              <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID">
+              <input @input="setLoginEmail" type="text" name="loginMember.email" class="form-control" id="exampleFormControlInput1" placeholder="ID">
             </div>
 
 
             <!-- 비밀번호 입력 -->
             <div class="d-grid gap-2 col-3 mx-auto" style="margin-top: 10px">
-              <input type="password" class="form-control" id="exampleFormControlInput1" placeholder="Password">
+              <input @input="setLoginPassword" type="password" name="loginMember.mmbrPw" class="form-control" id="exampleFormControlInput1" placeholder="Password">
             </div>
 
 
             <!-- 로그인 버튼 -->
             <div class="d-grid gap-2 col-3 mx-auto">
 
-              <button class="btn btn-primary" type="button" style="margin-top: 20px; background: #224CE6; border: 1px solid #224CE6; font-weight: 600">
+              <button @click="loginAction" class="btn btn-primary" type="button" style="margin-top: 20px; background: #224CE6; border: 1px solid #224CE6; font-weight: 600">
                 로그인
               </button>
 
@@ -39,12 +39,6 @@
                 회원가입
               </router-link>
 
-              <button @click="getMemberList()" class="btn btn-primary" type="button" style="margin-top: 20px; background: #224CE6; border: 1px solid #224CE6; font-weight: 600">
-                axios123123
-              </button>
-              <span>
-                {{connectData}}
-              </span>
             </div>
 
         </div>
@@ -54,24 +48,21 @@
 
 <script>
 export default {
-    name: "LoginPage",
-    data() {
-      return {
-        connectData: ""
-      }
-    }
+    name: "LoginPage"
     ,
     methods: {
-      getMemberList() {
-        this.$axios.get("api/memberList").then((res) => {this.connectData = res.data})
-        console.log('--------------');
-        console.log(this.connectData);
-        console.log('==============');
+      setLoginEmail(e) {
+        this.$store.commit('setLoginEmail', e.target.value);
+      }
+      ,
+      setLoginPassword(e) {
+        this.$store.commit('setLoginPassword', e.target.value);
+      }
+      ,
+      loginAction() {
+        this.$store.dispatch('loginAction');
       }
     },
-    mounted() {
-      this.getMemberList();
-    }
 
 }
 </script>

@@ -30,11 +30,6 @@ export default {
     height: calc(100vh - 80px);
     background:cornsilk;
 }
-#HouseBox {
-  float: right;
-  width: 400px;
-  height: calc(100vh - 80px);;
-  overflow-y: scroll;
-}
+
 
 </style>

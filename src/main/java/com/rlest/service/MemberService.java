@@ -7,7 +7,7 @@ import com.rlest.domain.Member;
 public interface MemberService {
 	public List<Member> getMemberList() throws Exception;
 	
-	public List<Member> getMember(String email) throws Exception;
+	public Member login(Member member) throws Exception;
 	
 	public void join(Member member) throws Exception;
 }

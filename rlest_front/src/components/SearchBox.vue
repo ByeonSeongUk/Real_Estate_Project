@@ -3,7 +3,7 @@
     <div id="searchBox">
 
         <!-- 검색 칸 -->
-        <div class="input-group mb-3">
+        <div class="input-group mb-3 searchInput">
             <input type="text" class="form-control input-style" placeholder="지역, 지하철역 검색">
             <button class="btn btn-outline-secondary btn-style" type="button" id="button-addon2">
                 <i class="fa-solid fa-magnifying-glass"></i>
@@ -170,6 +170,10 @@ export default {
 
 i{
     color: white;
+}
+
+.searchInput {
+  /*padding: 5px 15px 0 20px;*/
 }
 
 .btn-style {

@@ -1,10 +1,12 @@
 <template>
   <div id="app">
+    <NavBar></NavBar>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import NavBar from "@/components/NavBar";
 export default {
   name: 'App',
 
@@ -15,12 +17,14 @@ export default {
   },
 
   components: {
+    NavBar
 
   }
 }
 </script>
 
 <style>
+/* background : #224CE6 */
 * {
     margin: 0;
     padding: 0;

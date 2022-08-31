@@ -22,9 +22,9 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public List<Member> getMemeber(String email) throws Exception {
+	public Member login(Member member) throws Exception {
 		
-		return sql.selectOne(NAMESPACE + ".getMember", email);
+		return sql.selectOne(NAMESPACE + ".login", member);
 	}
 
 	@Override

@@ -17,12 +17,13 @@
             <div class="d-grid gap-2 col-12 mx-auto formStyle">
               <label for="email" class="form-label">이메일</label>
               <div class="input-group mb-3">
-                <input type="text" id="email" class="form-control" placeholder="Email">
+                <input @input="setAuthEmail" type="email" id="email" class="form-control" placeholder="Email">
                 <button
                     class="btn btn-outline-primary"
                     type="button">인증번호 요청</button>
               </div>
             </div>
+            {{getAuthEmail}}
 
             <!-- 인증 번호  -->
             <div class="d-grid gap-2 col-12 mx-auto formStyle">
@@ -32,6 +33,7 @@
                 <button
                     class="btn btn-outline-primary"
                     type="button">확인</button>
+                {{$store.authEmail}}
 
               </div>
               <span class="auth_check_message auth_success">인증완료</span>
@@ -54,8 +56,23 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
   name: "EmailModal",
+  computed: {
+    ...mapGetters({
+      getAuthEmail: 'getAuthEmail'
+    })
+  }
+  ,
+
+  methods: {
+    setAuthEmail(e) {
+      console.log(e.target.value);
+      this.$store.commit('setAuthEmail', e.target.value);
+    }
+  }
 
 }
 </script>

@@ -37,7 +37,7 @@ public class MainController {
 
 		System.out.println(member);
 //		Member memberInfo = memberService.login(member);
-		return "redirect:/";
+		return "router.push({name: 'home'})";
 	}
 	
 	@PostMapping("/join")
@@ -45,7 +45,7 @@ public class MainController {
 		
 		System.out.println(member);
 		memberService.join(member);
-		
-		return "redirect:/login";
+
+		return "router.push({name: 'home'})";
 	}
 }

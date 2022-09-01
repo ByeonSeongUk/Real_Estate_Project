@@ -10,6 +10,8 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
 
 
+
+
     // strict 모드 false
     strict: process.env.NODE_ENV !== 'production',
 
@@ -120,11 +122,18 @@ export const store = new Vuex.Store({
         getMember: (state) => {
             return state.member;
         }
+        ,
+        getJoinPassword: (state) => {
+            return state.member.mmbrPw;
+        }
+        ,
+
     }
     ,
 
     // Setters
     mutations: {
+
         // 검색 단위 전월세 선택
         setDeposit: (state, deposit) => {
             state.deposit = deposit;
@@ -198,20 +207,33 @@ export const store = new Vuex.Store({
         // 회원가입 요청
         joinAction: ({commit, state}) => {
 
+            // 정규식
+            // const reg = /^[0-9]+/g; // 숫자만 입력
+            const PWD_CHECK = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/
+
             const params = new URLSearchParams();
 
-            params.append('email', state.member.email);
-            params.append('mmbrPw', state.member.mmbrPw);
-            params.append('mmbrName', state.member.mmbrName);
 
-            axios.post('/api/join', params)
-                 .then(res => {
-                     commit(res.data)
-                     console.log(res);
-                 })
-                 .catch((err) => {
-                     console.log(err);
-                 });
+            // 비밀번호 유효성 검사
+            if(PWD_CHECK.test(state.member.mmbrPw)) {
+
+                params.append('email', state.member.email);
+                params.append('mmbrPw', state.member.mmbrPw);
+                params.append('mmbrName', state.member.mmbrName);
+
+                axios.post('/api/join', params)
+                    .then(res => {
+                        commit(res.data)
+                        router.push({name: 'home'})
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+            else{
+                alert('비밀번호 다시 입력!');
+            }
+
         }
         ,
         // 로그인 요청
@@ -225,8 +247,17 @@ export const store = new Vuex.Store({
 
             axios.post('/api/login', params)
                  .then(res => {
-                    commit(res.data)
-                    router.push({name: 'home'})
+                     const PWD_CHECK = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/
+
+                     let check = PWD_CHECK.test(res.data.mmbrPw);
+                        console.log("axios : " + check);
+                     if(check) {
+                        commit(res.data)
+                        router.push({name: 'home'})
+                     }
+                     else{
+                         alert('비밀번호 다시 입력!');
+                     }
                  })
                  .catch((err) => {
                     console.log(err);

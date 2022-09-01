@@ -120,13 +120,14 @@
 
 <script>
 
-import {mapGetters} from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
     name: "JoinPage",
     computed: {
       ...mapGetters({
-        getAuthEmail:"getAuthEmail"
+        getAuthEmail:"getAuthEmail",
+        getJoinPassword:"getJoinPassword"
       }),
 
     }
@@ -144,10 +145,34 @@ export default {
         this.$store.commit('setJoinName', e.target.value);
       }
       ,
+      // 비밀번호 유효성 검사
+      PW_CHECK: (e) => {
+        const PWD_CHECK = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/
+
+        console.log(e);
+
+        if(!PWD_CHECK.test(e)) {
+          console.log('비밀번호 형식에 맞지 않습니다!')
+          console.log("input : " + e);
+          return false;
+        }
+        else {
+          console.log('사용 가능한 비밀번호')
+          console.log("input : " + e);
+          return true;
+        }
+      }
+
+      ,
       joinAction() {
+        // let check = this.PW_CHECK(this.getJoinPassword);
+        // console.log(check);
+
         this.$store.dispatch('joinAction')
+
       }
     }
+
 
 }
 </script>

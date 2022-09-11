@@ -61,6 +61,55 @@
             rlest_num = #{rlestNum};
     </select>
 
+    <!-- 검색한 매물 불러오기 -->
+    <select id="searchRlestList" resultType="RealEstate">
+        SELECT rlest_num
+             , brkr_id
+             , rlest_adr
+             , rlest_sort
+             , deposit
+             , monthly_rent
+             , maintenance_charge
+             , room_area
+             , structure
+             , direction
+             , floor
+             , total_floor
+             , parking_check
+             , elevator_check
+             , move_in_day
+             , post_title
+             , rlest_intro
+             , trans_status_check
+             , delete_status_check
+             , crt_id
+             , DATE_FORMAT(crt_dttm, '%Y. %m. %d') AS crt_dttm
+             , upd_id
+             , upd_dttm
+        FROM
+            real_estate
+        WHERE 1=1
+        <!-- 검색 단어 -->
+        <if test="rlestAdr != ''">
+            AND rlest_adr like CONCAT('%',#{rlestAdr},'%')
+        </if>
+        <!-- 계약 구분 -->
+        <if test="rlestSort != ''">
+            AND rlest_sort = #{rlestSort}
+        </if>
+        <!-- 보증금 금액 -->
+        <if test="deposit != 0">
+            AND deposit = #{deposit}
+        </if>
+        <!-- 월세 금액 -->
+        <if test="monthlyRent != 0">
+            AND deposit = #{monthlyRent}
+        </if>
+        <!-- 방의 구조 -->
+        <if test="structure != ''">
+            AND structure = #{structure}
+        </if>
+    </select>
     
 </mapper>
 

@@ -23,10 +23,11 @@ export const store = new Vuex.Store({
         // Data
         loginCheck: false, // 로그인 체크
         wishList: true, // 위시리스트
+        searchAdr: '', // 검색한 주소
         deposit: 0, // 보증금
         monthlyRent: 0, // 월세
-        contract: 'contractAll', // 계약 방법(전체, 전세, 월세)
-        structure: 'structureAll', // 방구조
+        contract: '', // 계약 방법(전체, 전세, 월세)
+        structure: '', // 방구조
         authEmail: '' // 인증용 이메일,
         , // 사용자
         member:[
@@ -85,6 +86,11 @@ export const store = new Vuex.Store({
         // 위시리스트
         getWishList: (state) => {
             return state.wishList;
+        }
+        ,
+        // 검색한 단어(주소)
+        getSearchAdr: (state) => {
+            return state.searchAdr;
         }
         ,
         // 보증금
@@ -148,7 +154,11 @@ export const store = new Vuex.Store({
 
     // Setters
     mutations: {
-
+        // 검색한 단어(주소)
+        setSearchAdr: (state, searchAdr) => {
+            state.searchAdr = searchAdr;
+        }
+        ,
         // 검색 단위 전월세 선택
         setDeposit: (state, deposit) => {
             state.deposit = deposit;
@@ -337,6 +347,33 @@ export const store = new Vuex.Store({
                     console.log('axios : ' + res.data)
                     commit('setRlestDetail', res.data)
                     router.push({name: 'detail'})
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        ,
+        // 선택 매물 불러오기(매물 상세)
+        searchRlestList: ({commit, state}) => {
+
+            // post 으로 form 전송 방식
+            // const params = new URLSearchParams();
+            // params.append('rlestNum', state.clickRlestNumber);
+
+            // get 으로 Params 넘길때 하는 방법!
+            axios.get('rlest/searchRlestList',{
+                params: {
+                    rlestAdr: state.searchAdr,
+                    deposit: state.deposit,
+                    monthlyRent: state.monthlyRent,
+                    rlestSort: state.contract,
+                    structure: state.structure
+                }
+            })
+                .then(res  => {
+                    console.log('axios : ' + res.data)
+                    commit('setRlestList', res.data)
+                    router.push({name: 'home'})
                 })
                 .catch((err) => {
                     console.log(err);

@@ -2,8 +2,12 @@
 <template>
     <div id="HouseBox">
         <HouseBoxInfo></HouseBoxInfo>
-        <div @click="rlestDetail">
+
+        <div v-if="getRlestListAll.length != 0" @click="rlestDetail">
           <HouseList :getRlestListAll="getRlestListAll[i]" v-for="(roomList, i) in getRlestListAll" :key="i" class="HouseList"/>
+        </div>
+        <div v-else-if="getRlestListAll.length === 0">
+          <h2 style="font-size: 1.2rem; text-align: center; padding: 30px 0">조건에 만족하는 매물이 없습니다!</h2>
         </div>
     </div>
 </template>

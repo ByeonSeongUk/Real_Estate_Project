@@ -39,7 +39,7 @@ public class RlestController {
 	}
 
 	/**
-	 * 선택한 게시물 조회(매물 상세)
+	 * 선택한 게시물 상세 페이지(매물 상세)
 	 * params : Integer rlestNum
 	 * resultType : List<RealEstate>
 	 */
@@ -47,6 +47,17 @@ public class RlestController {
 	public List<RealEstate> getRlestDetail(Integer rlestNum) throws Exception {
 		System.out.println("controller : " + rlestNum);
 		return rlestService.getRlestDetail(rlestNum);
+	}
+
+	/**
+	 * 검색한 게시물 조회(검색 박스)
+	 * params : RealEstate
+	 * resultType : List<RealEstate>
+	 */
+	@GetMapping("/searchRlestList")
+	public List<RealEstate> searchRlestList(RealEstate realEstate) throws Exception {
+		System.out.println("controller : " + realEstate);
+		return rlestService.searchRlestList(realEstate);
 	}
 
 }

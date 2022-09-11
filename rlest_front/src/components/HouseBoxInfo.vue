@@ -1,7 +1,7 @@
 <template>
   <div id="HouseBoxInfo">
     <div class="hb_list">
-      <span>목록 OO 개</span>
+      <span>목록 {{getRlestListAll.length}} 개</span>
     </div>
     <div class="hb_unit">
       <a href=""><img src="../assets/images/unitChangeBtn.png"></a>
@@ -10,8 +10,16 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
 export default {
+
   name: "HouseBoxInfo"
+  ,
+  computed:
+    mapGetters({
+      getRlestListAll: 'getRlestListAll',
+    })
+
 }
 </script>
 

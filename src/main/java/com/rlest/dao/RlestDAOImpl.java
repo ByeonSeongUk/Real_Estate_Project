@@ -22,7 +22,12 @@ public class RlestDAOImpl implements RlestDAO {
 
 	@Override
 	public List<RealEstate> getRlestDetail(Integer rlestNum) throws Exception {
-		System.out.println("DAO : " + rlestNum);
 		return sql.selectList(NAMESPACE + ".getRlestDetail", rlestNum);
+	}
+
+	@Override
+	public List<RealEstate> searchRlestList(RealEstate realEstate) throws Exception {
+		System.out.println("DAO : " + realEstate);
+		return sql.selectList(NAMESPACE + ".searchRlestList", realEstate);
 	}
 }

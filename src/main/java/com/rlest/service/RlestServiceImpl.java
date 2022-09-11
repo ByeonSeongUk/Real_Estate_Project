@@ -22,4 +22,9 @@ public class RlestServiceImpl implements RlestService {
 	public List<RealEstate> getRlestDetail(Integer rlestNum) throws Exception {
 		return RlestDAO.getRlestDetail(rlestNum);
 	}
+
+	@Override
+	public List<RealEstate> searchRlestList(RealEstate realEstate) throws Exception {
+		return RlestDAO.searchRlestList(realEstate);
+	}
 }

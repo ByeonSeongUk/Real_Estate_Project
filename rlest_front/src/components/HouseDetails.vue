@@ -219,14 +219,16 @@ import ImgModal from "@/components/ImgModal";
 
 export default {
     name: 'HouseDetails',
-  components: {ImgModal},
-  computed: {
-    ...mapGetters({
-      getWishList: 'getWishList',
-      getRlestDetail: 'getRlestDetail'
-    })
-  },
+    components: {ImgModal}
+    ,
+    computed: {
+      ...mapGetters({
+        getWishList: 'getWishList',
+        getRlestDetail: 'getRlestDetail'
+      })
+    }
 
+    ,
     methods: {
       // 뒤로가기 버튼
       goBack() {

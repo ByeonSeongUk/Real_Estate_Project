@@ -7,12 +7,11 @@
         SELECT /* getMemberList(회원목록조회) */
                email
              , mmbr_pw
-             , mmbr_name
              , crt_id
              , crt_dttm
              , upd_id
              , upd_dttm
-  FROM member
+        FROM member
     </select>
     
     <!-- 회원 가입 -->
@@ -22,7 +21,6 @@
         VALUES(
                #{email}
              , SHA2(#{mmbrPw}, 256)
-             , #{mmbrName}
              , 'admin123'
              , now()
              , 'admin123'
@@ -33,11 +31,16 @@
     <!-- 로그인 처리 -->
     <select id="login" parameterType="Member" resultType="Member">
         SELECT email
-             , mmbr_name
+             , mmbr_pw
         FROM MEMBER
         WHERE email   = #{email}
         AND   mmbr_pw = SHA2(#{mmbrPw}, 256)
 
     </select>
+
+
     
 </mapper>
+
+
+

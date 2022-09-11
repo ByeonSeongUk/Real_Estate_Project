@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rlest.mappers.RlestMapper">
+
+    <!--  매물 전체 리스트 불러오기  -->
+    <select id="getRlestList" resultType="RealEstate">
+        SELECT rlest_num
+             , brkr_id
+             , rlest_adr
+             , rlest_sort
+             , deposit
+             , monthly_rent
+             , maintenance_charge
+             , room_area
+             , structure
+             , direction
+             , floor
+             , total_floor
+             , parking_check
+             , elevator_check
+             , move_in_day
+             , post_title
+             , rlest_intro
+             , trans_status_check
+             , delete_status_check
+             , crt_id
+             , DATE_FORMAT(crt_dttm, '%Y. %m. %d') AS crt_dttm
+             , upd_id
+             , upd_dttm
+        FROM
+            real_estate;
+    </select>
+
+
+    <!-- 선택 매물 리스트 불러오기 -->
+    <select id="getRlestDetail" resultType="RealEstate">
+        SELECT rlest_num
+             , brkr_id
+             , rlest_adr
+             , rlest_sort
+             , deposit
+             , monthly_rent
+             , maintenance_charge
+             , room_area
+             , structure
+             , direction
+             , floor
+             , total_floor
+             , parking_check
+             , elevator_check
+             , move_in_day
+             , post_title
+             , rlest_intro
+             , trans_status_check
+             , delete_status_check
+             , crt_id
+             , DATE_FORMAT(crt_dttm, '%Y년 %m월 %d일') AS crt_dttm
+        FROM
+            real_estate
+        WHERE
+            rlest_num = #{rlestNum};
+    </select>
+
+    
+</mapper>
+
+
+

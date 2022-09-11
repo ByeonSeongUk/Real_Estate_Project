@@ -1,6 +1,5 @@
 a<template>
   <div class="main">
-<!--    <NavBar></NavBar>-->
     <HouseMap :deposit="deposit" :monthlyRent="monthlyRent"></HouseMap>
   </div>
 </template>

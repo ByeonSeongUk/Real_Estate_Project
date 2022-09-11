@@ -36,9 +36,27 @@
 
         <!-- 로그인 / 회원가입 버튼 -->
         <div class="form-group loginBtn">
+            <!-- 로그인전 보이는 버튼 -->
             <router-link v-if="getLoginCheck == false" to="/login" class="btn btn-outline-primary btnStyle">로그인 및 회원가입</router-link>
 
-            <button v-if="getLoginCheck == true" type="button" class="btn btn-outline-primary">회원명</button>
+            <!-- 로그인시 보이는 버튼 -->
+            <div v-if="getLoginCheck == true" class="dropdown" aria-labelledby="dropdownMenuButton1">
+              <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                회원명
+              </button>
+
+              <ul class="dropdown-menu">
+                <li>
+                  <router-link to="/authCheck" class="dropdown-item dropdown-style">회원정보 수정</router-link>
+                </li>
+                <li>
+                  <button @click="logoutAction" class="dropdown-item dropdown-style">로그아웃</button>
+                </li>
+              </ul>
+            </div>
+
+
+
         </div>
     </div>
 </template>
@@ -51,7 +69,20 @@ export default {
 
     computed: mapGetters({
       getLoginCheck: 'getLoginCheck'
-    }),
+    })
+    ,
+    methods: {
+     logoutAction() {
+       this.$store.dispatch('logoutAction');
+     }
+    }
+    ,
+    action: {
+      logoutAction() {
+        this.$store.dispatch('logoutAction')
+
+      }
+    }
 
 
 }
@@ -102,14 +133,11 @@ ul, li {
 }
 
 .loginBtn {
-    float: right; 
-    line-height: 80px; 
+    float: right;
+    line-height: 80px;
     margin-right: 50px;
 }
-/*.btn-secondary { */
-/*    background: #224CE6;*/
-/*    border: 1px solid #224CE6;*/
-/*}*/
+
 /* 부트스트랩 수정 */
 .dropdown-remove-content::after {
     content: none
@@ -125,7 +153,12 @@ ul, li {
 }
 
 .dropdown-style {
-    font-size: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
     color: #333;
+}
+.dropdown-item {
+  height: 50px;
+  line-height: 48px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="WishListBoxWishListBox">
+  <div id="WishListBox">
     <router-link to="myListDetails" class="houseList">
       <HouseList :getELEST="getELEST[i]" v-for="(roomList, i) in getELEST" :key="i" class="houseList"/>
     </router-link>

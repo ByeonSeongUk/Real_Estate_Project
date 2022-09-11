@@ -93,11 +93,11 @@
             </div>
 
 
-            <!-- 이름 입력 -->
-            <div class="d-grid gap-2 col-3 mx-auto formStyle">
-              <label for="name" class="form-label">이름</label>
-              <input type="text" @input="setJoinName" id="name" class="form-control" name="member.mmbrName"  placeholder="Name">
-            </div>
+<!--            &lt;!&ndash; 이름 입력 &ndash;&gt;-->
+<!--            <div class="d-grid gap-2 col-3 mx-auto formStyle">-->
+<!--              <label for="name" class="form-label">이름</label>-->
+<!--              <input type="text" @input="setJoinName" id="name" class="form-control" name="member.mmbrName"  placeholder="Name">-->
+<!--            </div>-->
 
 
             <!-- 로그인 버튼 -->

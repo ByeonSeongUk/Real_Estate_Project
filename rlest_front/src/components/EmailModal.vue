@@ -17,13 +17,12 @@
             <div class="d-grid gap-2 col-12 mx-auto formStyle">
               <label for="email" class="form-label">이메일</label>
               <div class="input-group mb-3">
-                <input @input="setAuthEmail" type="email" id="email" class="form-control" placeholder="Email">
+                <input @input="setAuthEmail" type="email" id="email" class="form-control" placeholder="Email" readonly value="testEmail@gmail.co.kr">
                 <button
                     class="btn btn-outline-primary"
                     type="button">인증번호 요청</button>
               </div>
             </div>
-            {{getAuthEmail}}
 
             <!-- 인증 번호  -->
             <div class="d-grid gap-2 col-12 mx-auto formStyle">
@@ -33,11 +32,10 @@
                 <button
                     class="btn btn-outline-primary"
                     type="button">확인</button>
-                {{$store.authEmail}}
 
               </div>
               <span class="auth_check_message auth_success">인증완료</span>
-              <span class="auth_check_message auth_fail">인증실패</span>
+<!--              <span class="auth_check_message auth_fail">인증실패</span>-->
             </div>
 
           </div>
@@ -72,6 +70,8 @@ export default {
       console.log(e.target.value);
       this.$store.commit('setAuthEmail', e.target.value);
     }
+    ,
+
   }
 
 }

@@ -21,14 +21,14 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public Member login(Member member) throws Exception {
-		
-		return memberDAO.login(member);
+	public void join(Member member) throws Exception {
+		memberDAO.join(member);
 	}
 
 	@Override
-	public void join(Member member) throws Exception {
-		memberDAO.join(member);
+	public Member login(Member member) throws Exception {
+
+		return memberDAO.login(member);
 	}
 
 }

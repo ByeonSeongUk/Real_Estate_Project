@@ -2,11 +2,9 @@
 <template>
     <div id="HouseBox">
         <HouseBoxInfo></HouseBoxInfo>
-        <router-link to="houseDetails">
-          <HouseList :getELEST="getELEST[i]" v-for="(roomList, i) in getELEST" :key="i" class="HouseList"/>
-        </router-link>
-
-
+        <div @click="rlestDetail">
+          <HouseList :getRlestListAll="getRlestListAll[i]" v-for="(roomList, i) in getRlestListAll" :key="i" class="HouseList"/>
+        </div>
     </div>
 </template>
 
@@ -17,16 +15,50 @@ import {mapGetters} from "vuex";
 
 export default {
     name: 'HouseBox',
-
-    computed: mapGetters({
-      getELEST: 'getELEST'
-    }),
-
     components: {
       HouseBoxInfo,
       HouseList
     }
     ,
+    computed:
+      mapGetters({
+        getRlestListAll: 'getRlestListAll',
+        getClickRlestNumber: 'getClickRlestNumber',
+        getRlestDetail: 'getRlestDetail'
+    })
+    ,
+
+    methods:
+    {
+
+      getRlestList() {
+        this.$store.dispatch('getRlestList')
+
+      }
+      ,
+      rlestDetail() {
+        this.$store.dispatch('rlestDetail')
+      }
+
+
+    }
+
+    ,
+    action: {
+      getRlestList() {
+        this.$store.dispatch('getRlestList')
+
+      }
+      ,
+      rlestDetail() {
+        this.$store.dispatch('rlestDetail')
+      }
+    }
+    ,
+
+    mounted() {
+      this.getRlestList();
+    }
 
 }
 </script>
@@ -48,6 +80,14 @@ a {
   width: 400px;
   height: calc(100vh - 80px);;
   overflow-y: scroll;
+  background: white;
+  border-left: 1px solid rgb(225, 225, 225);
+  box-sizing: border-box;
+}
+
+.HouseList {
+  border-bottom: 1px solid rgb(225, 225, 225);
+  box-sizing: border-box;
 }
 
 @media screen and (max-width: 800px) {

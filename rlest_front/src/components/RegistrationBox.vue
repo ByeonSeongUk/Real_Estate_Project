@@ -2,7 +2,12 @@
 <template>
   <div app="RegistrationBox">
     <div class="container">
-      <img class="mainImg" src="../assets/images/registrationMain.png" alt="방내놓기"/>
+      <div class="row">
+        <div class="d-grid gap-2 col-12 mx-auto" style="text-align: center; padding: 30px;">
+          <h1 style="border-radius: 10px; background: #224CE6; padding: 15px 0; color: white">매물 등록</h1>
+        </div>
+      </div>
+<!--      <img class="mainImg" src="../assets/images/registrationMain.png" alt="방내놓기"/>-->
 
 <!--   위치 입력 정보 시작   -->
       <div class="row">

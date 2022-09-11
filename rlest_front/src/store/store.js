@@ -9,9 +9,6 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
 
-
-
-
     // strict 모드 false
     strict: process.env.NODE_ENV !== 'production',
 
@@ -30,20 +27,32 @@ export const store = new Vuex.Store({
         monthlyRent: 0, // 월세
         contract: 'contractAll', // 계약 방법(전체, 전세, 월세)
         structure: 'structureAll', // 방구조
-        authEmail: '', // 인증용 이메일,
+        authEmail: '' // 인증용 이메일,
+        , // 사용자
         member:[
             {
-                email: '',
-                mmbrPw: '',
-                mmbrName: ''
+                email: ''
+              , mmbrPw: ''
             }
-        ],
+        ]
+        ,// 사용자 로그인시
         loginMember:[
             {
-                email: '',
-                mmbrPw: '',
+                email: ''
+              , mmbrPw: ''
             }
-        ],
+        ]
+        ,
+        // 매물 목록
+        rlestList:[]
+        ,
+        // 클릭한 매물의 리스트 번호
+        clickRlestNumber: 11211212
+        ,
+        // 매물 목록
+        rlestDetail:[]
+        ,
+
 
 
 
@@ -67,14 +76,7 @@ export const store = new Vuex.Store({
 
     // Getters
     getters: {
-        getELEST: (state) => {
-            console.log('getter');
-            console.log(state.ELEST.structure);
-            console.log(state.ELEST)
-            return state.ELEST;
-        }
-        ,
-        /////////////////
+
         // 로그인 체크
         getLoginCheck: (state) => {
             return state.loginCheck;
@@ -123,10 +125,23 @@ export const store = new Vuex.Store({
             return state.member;
         }
         ,
-        getJoinPassword: (state) => {
-            return state.member.mmbrPw;
+        // 불러온 매물 리스트
+        getRlestListAll: (state) => {
+            console.log(state.rlestList)
+            return state.rlestList;
         }
         ,
+        // 클릭한 매물의 매물번호
+        getClickRlestNumber: (state) => {
+            console.log(state.clickRlestNumber);
+            return state.clickRlestNumber;
+        }
+        ,
+        // 매물 상세 불러오기
+        getRlestDetail: (state) => {
+            console.log(state.rlestDetail);
+            return state.rlestDetail;
+        }
 
     }
     ,
@@ -181,12 +196,6 @@ export const store = new Vuex.Store({
             console.log(state.member.mmbrPw);
         }
         ,
-        // 회원가입시 이름
-        setJoinName: (state, name) => {
-            state.member.mmbrName = name;
-            console.log(state.member.mmbrName);
-        }
-        ,
         // 로그인시 아이디(이메일)
         setLoginEmail: (state, email) => {
             state.loginMember.email = email;
@@ -199,6 +208,24 @@ export const store = new Vuex.Store({
             console.log(state.loginMember.mmbrPw);
         }
         ,
+        // DB에서 불러온 매물 리스트 저장
+        setRlestList: (state, rlestList) => {
+            state.rlestList = rlestList;
+        }
+        ,
+        // 클릭한 매물의 매물 번호
+        setClickRlestNumber: (state, clickRlestNumber) => {
+            console.log(clickRlestNumber);
+            state.clickRlestNumber = clickRlestNumber;
+        }
+        ,
+        // 매물 상세 불러오기
+        setRlestDetail: (state, rlestDetail) => {
+            console.log(rlestDetail);
+            state.rlestDetail = rlestDetail;
+        }
+
+
     }
     ,
 
@@ -208,8 +235,8 @@ export const store = new Vuex.Store({
         joinAction: ({commit, state}) => {
 
             // 정규식
-            // const reg = /^[0-9]+/g; // 숫자만 입력
             const PWD_CHECK = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/
+            // const reg = /^[0-9]+/g; // 숫자만 입력
 
             const params = new URLSearchParams();
 
@@ -219,9 +246,8 @@ export const store = new Vuex.Store({
 
                 params.append('email', state.member.email);
                 params.append('mmbrPw', state.member.mmbrPw);
-                params.append('mmbrName', state.member.mmbrName);
 
-                axios.post('/api/join', params)
+                axios.post('/join', params)
                     .then(res => {
                         commit(res.data)
                         router.push({name: 'home'})
@@ -237,6 +263,22 @@ export const store = new Vuex.Store({
         }
         ,
         // 로그인 요청
+        logoutAction: ({commit, state}) => {
+
+            axios.post('/logout')
+                 .then(res => {
+
+                    commit(res.data)
+                    state.loginCheck = false;
+                    router.push({name: 'home'})
+
+                 })
+                 .catch((err) => {
+                    console.log(err);
+                 });
+        }
+        ,
+        // 로그인 요청
         loginAction: ({commit, state}) => {
 
             const params = new URLSearchParams();
@@ -245,24 +287,62 @@ export const store = new Vuex.Store({
             params.append('mmbrPw', state.loginMember.mmbrPw);
 
 
-            axios.post('/api/login', params)
-                 .then(res => {
-                     const PWD_CHECK = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/
+            axios.post('/login', params)
+                .then(res => {
 
-                     let check = PWD_CHECK.test(res.data.mmbrPw);
-                        console.log("axios : " + check);
-                     if(check) {
+                    let check = true;
+                    console.log("axios : " + check);
+                    if(check) {
                         commit(res.data)
+                        state.loginCheck = true;
                         router.push({name: 'home'})
-                     }
-                     else{
-                         alert('비밀번호 다시 입력!');
-                     }
-                 })
-                 .catch((err) => {
+                    }
+                    else{
+                        alert('회원정보 불일치!');
+                    }
+                })
+                .catch((err) => {
                     console.log(err);
-                 });
+                });
         }
+        ,
+        // 전체 매물 불러오기
+        getRlestList: ({commit}) => {
+
+            axios.get('rlest/getRlestList')
+                .then(res  => {
+                    console.log('axios : ' + res.data)
+                    commit('setRlestList', res.data)
+
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        ,
+        // 선택 매물 불러오기(매물 상세)
+        rlestDetail: ({commit, state}) => {
+
+            // post 으로 form 전송 방식
+            // const params = new URLSearchParams();
+            // params.append('rlestNum', state.clickRlestNumber);
+
+            // get 으로 Params 넘길때 하는 방법!
+            axios.get('rlest/getRlestDetail',{
+                    params: {
+                        rlestNum: state.clickRlestNumber
+                    }
+                 })
+                 .then(res  => {
+                    console.log('axios : ' + res.data)
+                    commit('setRlestDetail', res.data)
+                    router.push({name: 'detail'})
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        ,
     }
 
 

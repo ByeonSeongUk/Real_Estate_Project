@@ -1,6 +1,9 @@
 <!-- 검색 컴포넌트 -->
 <template>
+
     <div id="HouseDetails">
+      <ImgModal></ImgModal>
+
       <div id="houseDetailsInfo">
         <div class="container mainBox">
 
@@ -9,7 +12,7 @@
               <a @click="goBack" href="#"><img id="backBtn" src="../assets/images/backBtn.png" alt="backBtn"/></a>
             </div>
             <div class="col-8">
-              <h4 id="detailHeader">OO구 OO동</h4>
+              <h4 id="detailHeader">{{ getRlestDetail[0].rlestAdr }}</h4>
             </div>
             <div class="col-2">
               <a href=""><img id="unitBtn" src="../assets/images/unitChangeBtn.png" alt="unitChangeBtn"/></a>
@@ -18,24 +21,26 @@
 
           <!-- 이미지 -->
           <div class="row">
-            <img id="mainImg" src="../assets/images/orImg24824824.jpeg">
+            <img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="../assets/images/orImg24824824.jpeg"/>
           </div>
 
           <!-- 거래 상태 / 등록일 -->
           <div class="row space">
-            <div class="col">
-              <span class="transStatus">거래 가능</span>
+
+            <div class="col-4">
+              <span      v-if="getRlestDetail[0].transStatusCheck == false" class="transStatusFalse">거래&#160;가능</span>
+              <span v-else-if="getRlestDetail[0].transStatusCheck == true" class="transStatusTrue">거래&#160;완료</span>
             </div>
 
-            <div class="col">
-              <span class="regDate">2022.07.13</span>
+            <div class="col-8">
+              <span class="regDate">{{ getRlestDetail[0].crtDttm }}&#160;작성</span>
             </div>
           </div>
 
           <!-- 전월세 구분, 금액 -->
           <div class="row space division">
             <div class="col-10">
-              <h4>월세 1000&#160;&#47;&#160;80</h4>
+              <h4>{{ numberToKorean(getRlestDetail[0].deposit) }}&#160;&#47;&#160;{{ numberToKorean(getRlestDetail[0].monthlyRent) }}</h4>
             </div>
 
             <!-- 위시리스트 -->
@@ -44,7 +49,7 @@
               <a v-if="getWishList == 1" href=""><i class="fa-regular fa-heart"></i></a>
             </div>
 
-            <p>등록번호&#160;&#58;&#160;1234567890</p>
+            <p>등록번호&#160;&#58;&#160;{{ getRlestDetail[0].rlestNum }}</p>
           </div>
 
           <!-- 면적 | 관리비 | 구조 -->
@@ -52,17 +57,17 @@
 
             <div class="col">
               <h4>면적</h4>
-              <p>24m²</p>
+              <p>{{ getRlestDetail[0].roomArea }}m²</p>
             </div>
 
             <div class="col">
               <h4>관리비</h4>
-              <p>10만원</p>
+              <p>{{ numberToKorean(getRlestDetail[0].maintenanceCharge) }}</p>
             </div>
 
             <div class="col">
               <h4>구조</h4>
-              <p>분리형 원룸</p>
+              <p>{{ getRlestDetail[0].structure }}&#160;원룸</p>
             </div>
           </div>
 
@@ -77,7 +82,8 @@
               <span>주차</span>
             </div>
             <div class="col-8">
-              <span>불가능</span>
+              <span v-if="getRlestDetail[0].structure == false">불가능</span>
+              <span v-else>가능</span>
             </div>
           </div>
 
@@ -86,7 +92,8 @@
               <span>엘리베이터</span>
             </div>
             <div class="col-8">
-              <span>없음</span>
+              <span v-if="getRlestDetail[0].elevatorCheck == false">없음</span>
+              <span v-else>있음</span>
             </div>
           </div>
 
@@ -95,7 +102,7 @@
               <span>입주가능일</span>
             </div>
             <div class="col-8">
-              <span>2022.09.01</span>
+              <span>{{ getRlestDetail[0].moveInDay }}</span>
             </div>
           </div>
 
@@ -104,7 +111,7 @@
               <span>관리비</span>
             </div>
             <div class="col-8">
-              <span>10만원</span>
+              <span>{{ numberToKorean(getRlestDetail[0].maintenanceCharge) }}</span>
             </div>
           </div>
 
@@ -113,7 +120,7 @@
               <span>구조</span>
             </div>
             <div class="col-8">
-              <span>분리형 원룸</span>
+              <span>{{ getRlestDetail[0].structure }}&#160;원룸</span>
             </div>
           </div>
 
@@ -122,7 +129,7 @@
               <span>방향</span>
             </div>
             <div class="col-8">
-              <span>남향</span>
+              <span>{{ getRlestDetail[0].direction }}</span>
             </div>
           </div>
 
@@ -131,7 +138,7 @@
               <span>층수</span>
             </div>
             <div class="col-8">
-              <span>3/10층</span>
+              <span>{{ getRlestDetail[0].floor }}층&#47;{{ getRlestDetail[0].totalFloor }}층</span>
             </div>
           </div>
 
@@ -140,7 +147,7 @@
               <span>주소</span>
             </div>
             <div class="col-8">
-              <span>OO구 OO동 1612-10, 301호</span>
+              <span>{{ getRlestDetail[0].rlestAdr }}</span>
             </div>
           </div>
           <!-- 매물 정보 끝 -->
@@ -170,7 +177,7 @@
 
           <!-- 매물 설명 제목 -->
           <div class="row space conInfo">
-            <h3>등록한 매물 제목</h3>
+            <h3>{{ getRlestDetail[0].postTitle }}</h3>
           </div>
 
           <!-- 매물 설명 내용 -->
@@ -208,17 +215,47 @@
 
 <script>
 import { mapGetters } from "vuex";
+import ImgModal from "@/components/ImgModal";
 
 export default {
     name: 'HouseDetails',
-    computed: mapGetters({
-      getWishList: 'getWishList'
-    }),
+  components: {ImgModal},
+  computed: {
+    ...mapGetters({
+      getWishList: 'getWishList',
+      getRlestDetail: 'getRlestDetail'
+    })
+  },
 
     methods: {
       // 뒤로가기 버튼
       goBack() {
         this.$router.go(-1);
+      }
+      ,
+      // 받아온 금액을 한글로 변환
+      numberToKorean(number){
+        let inputNumber  = number < 0 ? false : number;
+        let unitWords    = ['', '만원', '억', '조', '경'];
+        let splitUnit    = 10000;
+        let splitCount   = unitWords.length;
+        let resultArray  = [];
+        let resultString = '';
+
+        for (let i = 0; i < splitCount; i++){
+          let unitResult = (inputNumber % Math.pow(splitUnit, i + 1)) / Math.pow(splitUnit, i);
+          unitResult = Math.floor(unitResult);
+          if (unitResult > 0){
+            resultArray[i] = unitResult;
+          }
+        }
+
+        for (let i = 0; i < resultArray.length; i++){
+          if(!resultArray[i]) continue;
+          resultString = String(resultArray[i]) + unitWords[i] + resultString;
+        }
+
+        return resultString;
       }
     }
 }
@@ -283,10 +320,16 @@ li, ul, ol {
 }
 
 /* 거래 상태 */
-#houseDetailsInfo .transStatus {
+#houseDetailsInfo .transStatusFalse {
   font-weight: bold;
   font-size: 1.2rem;
   color: forestgreen;
+}
+
+#houseDetailsInfo .transStatusTrue {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: crimson;
 }
 
 #houseDetailsInfo .regDate {

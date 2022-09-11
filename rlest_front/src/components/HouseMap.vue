@@ -13,7 +13,7 @@
 
 import SearchBox from './SearchBox.vue'
 import KakaoMap from "./KakaoMap.vue";
-// https://codesandbox.io/s/nervous-keldysh-87yxg?file=/src/App.vue
+
 export default {
     name: 'app',
 

@@ -34,7 +34,6 @@
               <button @click="loginAction" class="btn btn-primary" type="button" style="margin-top: 20px; background: #224CE6; border: 1px solid #224CE6; font-weight: 600">
                 로그인
               </button>
-
               <router-link to="/join" id="joinBtn">
                 회원가입
               </router-link>
@@ -62,7 +61,15 @@ export default {
       loginAction() {
         this.$store.dispatch('loginAction');
       }
-    },
+      ,
+    }
+    ,
+    action: {
+      loginAction() {
+        this.$store.dispatch('loginAction')
+
+      }
+    }
 
 }
 </script>

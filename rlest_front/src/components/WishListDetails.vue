@@ -17,7 +17,7 @@
           </div>
 
           <!-- 이미지 -->
-          <div class="row">
+          <div class="row" style="width: 100%">
             <img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="../assets/images/orImg24824824.jpeg"/>
           </div>
 
@@ -198,6 +198,19 @@
             </div>
           </div>
 
+          <div class="row" style="margin: 0; padding-bottom: 15px">
+            <!-- 좌측 주소 입력 폼들 -->
+            <div class="d-grid gap-2 col-4 mx-auto">
+              <button @click="test" class="btn btn-danger btnStyle">삭제</button>
+            </div>
+            <div class="d-grid gap-2 col-4 mx-auto">
+              <button class="btn btn-success btnStyle">수정</button>
+            </div>
+            <div class="d-grid gap-2 col-4 mx-auto">
+              <button class="btn btn-info btnStyle postBtn">거래완료</button>
+            </div>
+          </div>
+
         </div>
 
 
@@ -211,7 +224,8 @@ import { mapGetters } from "vuex";
 export default {
     name: 'HouseDetails',
     computed: mapGetters({
-      getWishList: 'getWishList'
+      getWishList: 'getWishList',
+      getELEST: 'getELEST',
     })
     ,
     methods: {
@@ -219,6 +233,12 @@ export default {
       goBack() {
         this.$router.go(-1);
       }
+      ,
+      test() {
+        // confirm('매물번호 [' + this.getELEST[0].rlest_num + ']을(를) 삭제하시겠습니까?');
+        alert('매물번호 [' + this.getELEST[0].rlest_num + ']을(를) 삭제할 수 없습니다!\n - 거래완료 처리 후 다시 시도해주세요!');
+      }
+
     }
 }
 </script>
@@ -231,7 +251,7 @@ li, ul, ol {
 #HouseDetails {
   width: 100%;
   height: calc(100vh - 160px);
-  overflow-y: scroll;
+
   box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -246,6 +266,11 @@ li, ul, ol {
 
 .mainBox {
   padding: 0;
+  overflow-y: scroll;
+}
+
+.mainBox::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
 }
 
 .space {
@@ -417,6 +442,18 @@ li, ul, ol {
 }
 .last-con {
   padding-bottom: 20px;
+  padding-right: 0;
 }
 
+/* 버튼 스타일 */
+.btnStyle {
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.postBtn {
+  background: #224CE6;
+  border: 1px solid #224CE6;
+}
 </style>

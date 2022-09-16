@@ -16,8 +16,8 @@
             <nav aria-label="Page navigation example">
               <ul class="pagination"  style="justify-content: center; text-align: center">
 
-                <li @click="setCurrentPage(getPaging.before)" class="page-item">
-                  <a class="page-link" aria-label="Previous">
+                <li class="page-item">
+                  <a @click="setCurrentPage(getPaging.before == 0 ? Math.floor(getPaging.count / getPaging.offset) + 1 : getPaging.before)" class="page-link" aria-label="Previous">
                     <span aria-hidden="true">
                       <i class="fa-solid fa-chevron-left" id="leftBtn"/>
                     </span>
@@ -29,8 +29,9 @@
                 </li>
 
 
-                <li v-if="getPaging.nextSection == true" class="page-item">
-                  <a class="page-link" @click="setCurrentPage(getPaging.forward)" aria-label="Next">
+                <li class="page-item">
+                  <a class="page-link" @click="setCurrentPage(getPaging.nextSection ? getPaging.forward: 1)" aria-label="Next">
+
                     <span aria-hidden="true">
                       <i class="fa-solid fa-chevron-right" id="rightBtn"/>
                     </span>
@@ -63,18 +64,13 @@ export default {
         getClickRlestNumber: 'getClickRlestNumber',
         getRlestDetail: 'getRlestDetail',
         getListCount: 'getListCount',
-        getPagingSection: 'getPagingSection',
         getCurrentPage: 'getCurrentPage',
         getPaging: 'getPaging'
     })
     ,
 
     methods: {
-      getRlestList() {
-        this.$store.dispatch('getRlestList')
 
-      }
-      ,
       rlestDetail() {
         this.$store.dispatch('rlestDetail')
       }
@@ -84,14 +80,7 @@ export default {
         this.$store.commit('setCurrentPage', e);
       }
       ,
-      BEFORE_NUM() {
-        this.$store.commit('BEFORE_NUM')
-      }
-      ,
-      NEXT_NUM() {
-        this.$store.commit('NEXT_NUM')
-      }
-      ,
+      // 페이징 버튼 맞추기
       range: function (start, end){
         let list = []
         for (let i = start; i <= end ; i ++) list.push(i);
@@ -101,28 +90,24 @@ export default {
 
     ,
     action: {
-      getRlestList() {
-        this.$store.dispatch('getRlestList')
 
-      }
-      ,
       rlestDetail() {
         this.$store.dispatch('rlestDetail')
       }
     }
-    ,
-
-    mounted() {
-      this.getRlestList();
-    }
-    ,
-    // 페이징 처리 번호를 받아옴
-    watch: {
-      getCurrentPage: function() {
-        console.log('watcher')
-        this.getRlestList();
-      }
-    }
+    // ,
+    //
+    // mounted() {
+    //   this.getRlestList();
+    // }
+    // ,
+    // // 페이징 처리 번호를 받아옴
+    // watch: {
+    //   getCurrentPage: function() {
+    //     console.log('watcher')
+    //     this.getRlestList();
+    //   }
+    // }
 
 }
 </script>

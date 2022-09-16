@@ -126,9 +126,10 @@ export default {
             getMonthlyRent: 'getMonthlyRent',
             getContract: 'getContract',
             getStructure: 'getStructure',
+            getCurrentPage: 'getCurrentPage'
         })
     }
-      ,
+    ,
 
     methods: {
       setSearchAdr(e) {
@@ -185,6 +186,19 @@ export default {
     action: {
       searchRlestList() {
         this.$store.dispatch('searchRlestList')
+      }
+    }
+    ,
+
+    mounted() {
+      this.searchRlestList();
+    }
+    ,
+    // 페이징 처리 번호를 받아옴
+    watch: {
+      getCurrentPage: function() {
+        console.log('watcher')
+        this.searchRlestList();
       }
     }
 

@@ -22,6 +22,9 @@ public interface RlestDAO {
     // 검색한 매물 불러오기
     public List<RealEstate> searchRlestList(HashMap<String, Object> map) throws Exception;
 
+    // 검색한 매물 카운터
+    public int searchRlestListCount(RealEstate realEstate) throws Exception;
+
     // 위시리스트 확인
     public Integer getWishListCheck(WishList wishList) throws Exception;
 

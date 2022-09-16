@@ -13,15 +13,12 @@ import org.apache.ibatis.type.Alias;
 public class Paging {
 
 	private int     page;			  // 현재 페이지 번호
-	private int     pageSize;		  // 화면 하단에 출력할 페이지 사이즈
 	private int     count;            // 전체 게시물수
 	private int     startPage;        // 첫 페이지 번호
 	private int     endPage;          // 끝 페이지 번호
 	private int     limitStart;       // LIMIT 시작 위치
 	private int     offset;           // 한 페이지당 보여줄 게시물 수
 	private boolean nextSection;      // 페이징의 다음 섹션 존재 여부
-	private boolean existPrevPage;    // 이전 페이지 존재 여부
-	private boolean existNextPage;    // 다음 페이지 존재 여부
 	private int 	before;			  // 이전 버튼 눌렀을때 이동할 페이지 번호
 	private int 	forward;		  // 다음 버튼 눌렀을때 이동할 페이지 번호
 
@@ -35,7 +32,6 @@ public class Paging {
 		this.page = page;
 		this.count = count;
 		this.offset = BOARD_CNT;
-		this.pageSize = BOARD_CNT;
 
 		// 페이징 버튼 section  (ex | 1,2,3,4,5 > 6,7,8,9,10 > ...)
 		int section;

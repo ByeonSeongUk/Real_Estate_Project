@@ -100,8 +100,7 @@
              , upd_dttm
         FROM
             real_estate
-        WHERE 1=1
-           AND delete_status_check = 0
+        WHERE delete_status_check = 0
         <!-- 검색 단어 -->
         <if test="realEstate.rlestAdr != ''">
            AND rlest_adr like CONCAT('%',#{realEstate.rlestAdr},'%')
@@ -126,6 +125,33 @@
                  crt_dttm           DESC
            LIMIT #{paging.offset}
           OFFSET #{paging.limitStart}
+    </select>
+
+    <!-- 검색한 매물 카운트 -->
+    <select id="searchRlestListCount" parameterType="realEstate" resultType="int">
+         SELECT count(rlest_num)
+           FROM real_estate
+          WHERE delete_status_check = 0
+        <!-- 검색 단어 -->
+        <if test="rlestAdr != ''">
+            AND rlest_adr like CONCAT('%',#{rlestAdr},'%')
+        </if>
+        <!-- 계약 구분 -->
+        <if test="rlestSort != ''">
+            AND rlest_sort = #{rlestSort}
+        </if>
+        <!-- 보증금 금액 -->
+        <if test="deposit != 0">
+            AND deposit = #{deposit}
+        </if>
+        <!-- 월세 금액 -->
+        <if test="monthlyRent != 0">
+            AND deposit = #{monthlyRent}
+        </if>
+        <!-- 방의 구조 -->
+        <if test="structure != ''">
+            AND structure = #{structure}
+        </if>
     </select>
 
     <!-- 위시리스트 체크 -->

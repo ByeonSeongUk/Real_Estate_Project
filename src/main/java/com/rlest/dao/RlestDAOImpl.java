@@ -38,6 +38,11 @@ public class RlestDAOImpl implements RlestDAO {
 	}
 
 	@Override
+	public int searchRlestListCount(RealEstate realEstate) throws Exception {
+		return sql.selectOne(NAMESPACE + ".searchRlestListCount", realEstate);
+	}
+
+	@Override
 	public Integer getWishListCheck(WishList wishList) throws Exception {
 		return sql.selectOne(NAMESPACE + ".getWishListCheck", wishList);
 	}

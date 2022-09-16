@@ -43,10 +43,15 @@ public class RlestServiceImpl implements RlestService {
 	@Override
 	public HashMap<String, Object> searchRlestList(RealEstate realEstate, int page) throws Exception {
 
-		Paging paging = new Paging(page, RlestDAO.rlestCount());
 
 		HashMap<String, Object> map = new HashMap<>();
 		HashMap<String, Object> mapperMap = new HashMap<>();
+
+
+		Paging paging = new Paging(page, RlestDAO.searchRlestListCount(realEstate));
+
+		int count = RlestDAO.searchRlestListCount(realEstate);
+		paging.setCount(count);
 
 		mapperMap.put("realEstate", realEstate);
 		mapperMap.put("paging", paging);

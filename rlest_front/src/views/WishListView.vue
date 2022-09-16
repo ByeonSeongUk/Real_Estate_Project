@@ -2,12 +2,17 @@
   <div id="WishListView">
     <ImgModal></ImgModal>
 
-    <div v-if="getWishList == true" class="wishListBox">
+
+    <div v-if="getLoginCheck === 1" class="wishListBox">
       <h3 class="wish_header">내 위시리스트</h3>
-      <router-view></router-view>
+      <div class="houseList">
+        <div>
+          <span>로그인 후 접근 가능!</span>
+        </div>
+      </div>
     </div>
 
-    <div v-if="getWishList == false" class="wishListBox">
+    <div v-else-if="getWishList.length == 0" class="wishListBox">
       <h3 class="wish_header">내 위시리스트</h3>
       <div class="houseList">
         <div>
@@ -15,6 +20,14 @@
         </div>
       </div>
     </div>
+
+
+    <div v-else class="wishListBox">
+      <h3 class="wish_header">내 위시리스트</h3>
+      <router-view></router-view>
+    </div>
+
+
   </div>
 </template>
 
@@ -26,13 +39,44 @@ export default {
   name: "WishListView",
 
   computed: mapGetters({
-    getELEST: 'getELEST',
-    getWishList: 'getWishList'
+    getWishList: 'getWishList',
+    getLoginCheck: 'getLoginCheck'
   }),
 
   components: {
     ImgModal
   }
+  ,
+
+  methods: {
+    loginCheck() {
+      this.$store.dispatch('loginCheck')
+    }
+    ,
+    getMyWishList() {
+      this.$store.dispatch('getMyWishList')
+    }
+
+  }
+
+  ,
+  action: {
+    loginCheck() {
+      this.$store.dispatch('loginCheck')
+    }
+    ,
+    getMyWishList() {
+      this.$store.dispatch('getMyWishList')
+    }
+
+  }
+  ,
+
+  mounted() {
+    this.loginCheck();
+    this.getMyWishList();
+  }
+
 }
 
 </script>

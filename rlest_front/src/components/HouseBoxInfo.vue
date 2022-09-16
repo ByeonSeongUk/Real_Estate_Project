@@ -1,10 +1,10 @@
 <template>
   <div id="HouseBoxInfo">
     <div class="hb_list">
-      <span>목록 {{getRlestListAll.length}} 개</span>
+      <span>목록 {{getPaging.count}} 개</span>
     </div>
     <div class="hb_unit">
-      <a href=""><img src="../assets/images/unitChangeBtn.png"></a>
+      <a href="#"><img src="../assets/images/unitChangeBtn.png"></a>
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
   ,
   computed:
     mapGetters({
-      getRlestListAll: 'getRlestListAll',
+      getPaging: 'getPaging'
     })
 
 }
@@ -50,9 +50,10 @@ export default {
   text-align: right;
   width: 20%;
   height: 100%;
-  padding-right: 1%;
+  padding-right: 3%;
+  padding-bottom: 3%;
   line-height: 50px;
-  /*text-align: center;*/
+
   background: #FFFFFF;
 }
 </style>

@@ -11,12 +11,12 @@
             <div class="col-2">
               <a @click="goBack" href="#"><img id="backBtn" src="../assets/images/backBtn.png" alt="backBtn"/></a>
             </div>
-            <div class="col-8">
+            <div class="col-10">
               <h4 id="detailHeader">{{ getRlestDetail[0].rlestAdr }}</h4>
             </div>
-            <div class="col-2">
-              <a href=""><img id="unitBtn" src="../assets/images/unitChangeBtn.png" alt="unitChangeBtn"/></a>
-            </div>
+<!--            <div class="col-2">-->
+<!--              <a href=""><img id="unitBtn" src="../assets/images/unitChangeBtn.png" alt="unitChangeBtn"/></a>-->
+<!--            </div>-->
           </div>
 
           <!-- 이미지 -->
@@ -39,14 +39,17 @@
 
           <!-- 전월세 구분, 금액 -->
           <div class="row space division">
-            <div class="col-10">
+            <div v-if="getRlestDetail[0].rlestSort == '전세'" class="col-10">
+              <h4>{{ numberToKorean(getRlestDetail[0].deposit) }}</h4>
+            </div>
+            <div v-else class="col-10">
               <h4>{{ numberToKorean(getRlestDetail[0].deposit) }}&#160;&#47;&#160;{{ numberToKorean(getRlestDetail[0].monthlyRent) }}</h4>
             </div>
 
             <!-- 위시리스트 -->
             <div class="col-2 wishList">
-              <a v-if="getWishList == 0" href=""><i class="fa-solid fa-heart"></i></a>
-              <a v-if="getWishList == 1" href=""><i class="fa-regular fa-heart"></i></a>
+              <a @click="wishListCtrDel" v-if="getWishListState == 1"><i class="fa-solid fa-heart wishBtn"></i></a>
+              <a @click="wishListCtrDel" v-if="getWishListState == 0"><i class="fa-regular fa-heart wishBtn"></i></a>
             </div>
 
             <p>등록번호&#160;&#58;&#160;{{ getRlestDetail[0].rlestNum }}</p>
@@ -157,22 +160,22 @@
             <h3>옵션 정보</h3>
           </div>
 
+
           <!-- 옵션 항목 -->
-          <div class="row space">
+          <div v-if = "getAboutOptions != []" class="row space">
             <ul class="optionListBox">
-              <li class="optionList"><p>에어컨</p></li>
-              <li class="optionList"><p>냉장고</p></li>
-              <li class="optionList"><p>세탁기</p></li>
-              <li class="optionList"><p>가스레인지</p></li>
-              <li class="optionList"><p>인덕션</p></li>
-              <li class="optionList"><p>전자레인지</p></li>
-              <li class="optionList"><p>책상</p></li>
-              <li class="optionList"><p>책장</p></li>
-              <li class="optionList"><p>침대</p></li>
-              <li class="optionList"><p>옷장</p></li>
-              <li class="optionList"><p>신발장</p></li>
-              <li class="optionList"><p>싱크대</p></li>
+              <li :getAboutOptions="getAboutOptions[i]"
+                   v-for="(getAboutOptions, i) in getAboutOptions" :key="i"
+                  class="optionList">
+                <p>{{getAboutOptions.optName}}</p>
+              </li>
             </ul>
+          </div>
+
+          <div v-if = "getAboutOptions.length == 0" class="row space" style="font-weight:600 ; width: 100%; height: 80px;">
+            <div class="col-md-12" style="text-align: center;">
+              <p>해당 매물의 옵션이 없습니다!</p>
+            </div>
           </div>
 
           <!-- 매물 설명 제목 -->
@@ -223,8 +226,10 @@ export default {
     ,
     computed: {
       ...mapGetters({
-        getWishList: 'getWishList',
-        getRlestDetail: 'getRlestDetail'
+        getWishListState: 'getWishListState',
+        getRlestDetail: 'getRlestDetail',
+        getClickRlestNumber: 'getClickRlestNumber',
+        getAboutOptions: 'getAboutOptions'
       })
     }
 
@@ -259,7 +264,50 @@ export default {
 
         return resultString;
       }
+      ,
+      // 위시리스트 추가, 삭제
+      wishListCtrDel() {
+        this.$store.dispatch('wishListCtrDel')
+      }
+      ,
+      // 위시리스트에 있는지 체크
+      wishListCheck() {
+        this.$store.dispatch('wishListCheck')
+      }
+      ,
+      // 상세페이지 옵션 정보 불러오기
+      aboutOptions() {
+        this.$store.dispatch('aboutOptions')
+      }
+      ,
+      // 현재 보고 있는 상세페이지의 매물 주소로 지도를 이동
+      setDetailPointer(e) {
+        console.log('상세페이지 : ' + e);
+        this.$store.commit('setDetailPointer', e);
+      }
     }
+    ,
+    action: {
+      wishListCtrDel() {
+        this.$store.dispatch('wishListCtrDel')
+      }
+      ,
+      wishListCheck() {
+        this.$store.dispatch('wishListCheck')
+      }
+      ,
+      aboutOptions() {
+        this.$store.dispatch('aboutOptions')
+      }
+    }
+    ,
+    created() {
+      this.wishListCheck();
+      this.aboutOptions();
+      console.log('created :' + this.getRlestDetail[0].rlestAdr);
+      this.setDetailPointer(this.getRlestDetail[0].rlestAdr);
+    }
+
 }
 </script>
 
@@ -307,7 +355,8 @@ li, ul, ol {
 #detailHeader {
   float: left;
   padding-top: 2px;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+  overflow: hidden;
 }
 
 #unitBtn {
@@ -429,6 +478,11 @@ li, ul, ol {
 /* 매물소개, 중개사소개 내용 */
 .contents p {
   padding: 0 20px;
+}
+
+/* 위시리스트 버튼 */
+.wishBtn:hover {
+  cursor: pointer;
 }
 
 </style>

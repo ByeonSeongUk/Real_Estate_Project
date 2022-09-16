@@ -27,19 +27,6 @@ public class MainController {
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
 	/**
-	 * 테스트 코드
-	 * params : null
-	 * resultType : List<Member>
-	 */
-	@GetMapping("/memberList")
-	public List<Member> getMemberList() throws Exception{
-
-		List<Member> getMemberList = memberService.getMemberList();
-
-		return getMemberList;
-	}
-
-	/**
 	 * 회원가입
 	 * params : member.email, member.mmbrPw
 	 * resultType : String(Router)
@@ -67,9 +54,9 @@ public class MainController {
 
 		session.setAttribute("LOGIN_MEMBER", member.getEmail());
 
-		System.out.println("session : " + session.getAttribute("LOGIN_MEMBER"));
+		String email = (String) session.getAttribute("LOGIN_MEMBER");
 
-		return "router.push({name: 'home'})";
+		return email;
 	}
 
 
@@ -86,5 +73,25 @@ public class MainController {
 		session.invalidate();
 
 		return "router.push({name: 'home'})";
+	}
+
+	/**
+	 * 로그인체크
+	 * params : null
+	 * resultType : 0(로그인 되어 있음), 1(로그인 되어 있지 않음)
+	 */
+	@PostMapping("/loginCheck")
+	public String loginCheck(HttpServletRequest request) throws Exception {
+
+		HttpSession session = request.getSession();
+
+		String email = (String) session.getAttribute("LOGIN_MEMBER");
+
+		if(email != null) {
+			return email;
+		}
+		else {
+			return "1";
+		}
 	}
 }

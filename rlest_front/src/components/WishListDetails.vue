@@ -1,15 +1,19 @@
 <!-- 검색 컴포넌트 -->
 <template>
-    <div id="HouseDetails">
+
+    <div id="wishListDetails">
+
+      <ImgModal></ImgModal>
+
       <div id="houseDetailsInfo">
         <div class="container mainBox">
 
           <div class="row detailBar">
-            <div class="col-1">
+            <div class="col-2">
               <a @click="goBack" href="#"><img id="backBtn" src="../assets/images/backBtn.png" alt="backBtn"/></a>
             </div>
-            <div class="col-9">
-              <h4 id="detailHeader">OO구 OO동</h4>
+            <div class="col-8">
+              <h4 id="detailHeader">{{ getWishListDetail[0].rlestAdr }}</h4>
             </div>
             <div class="col-2">
               <a href=""><img id="unitBtn" src="../assets/images/unitChangeBtn.png" alt="unitChangeBtn"/></a>
@@ -17,34 +21,34 @@
           </div>
 
           <!-- 이미지 -->
-          <div class="row" style="width: 100%">
-            <img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="../assets/images/orImg24824824.jpeg"/>
-          </div>
+          <img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="../assets/images/orImg24824824.jpeg"/>
 
           <!-- 거래 상태 / 등록일 -->
           <div class="row space">
-            <div class="col">
-              <span class="transStatus">거래 가능</span>
+
+            <div class="col-4">
+              <span      v-if="getWishListDetail[0].transStatusCheck == false" class="transStatusFalse">거래&#160;가능</span>
+              <span v-else-if="getWishListDetail[0].transStatusCheck == true" class="transStatusTrue">거래&#160;완료</span>
             </div>
 
-            <div class="col">
-              <span class="regDate">2022.07.13</span>
+            <div class="col-8">
+              <span class="regDate">{{ getWishListDetail[0].crtDttm }}&#160;작성</span>
             </div>
           </div>
 
           <!-- 전월세 구분, 금액 -->
           <div class="row space division">
             <div class="col-10">
-              <h4>월세 1000&#160;&#47;&#160;80</h4>
+              <h4>{{ numberToKorean(getWishListDetail[0].deposit) }}&#160;&#47;&#160;{{ numberToKorean(getWishListDetail[0].monthlyRent) }}</h4>
             </div>
 
             <!-- 위시리스트 -->
             <div class="col-2 wishList">
-              <a v-if="getWishList == 0" href=""><i class="fa-solid fa-heart"></i></a>
-              <a v-if="getWishList == 1" href=""><i class="fa-regular fa-heart"></i></a>
+              <a @click="wishListCtrDel" v-if="getWishListState == 1" href="#"><i class="fa-solid fa-heart"></i></a>
+              <a @click="wishListCtrDel" v-if="getWishListState == 0" href="#"><i class="fa-regular fa-heart"></i></a>
             </div>
 
-            <p>등록번호&#160;&#58;&#160;1234567890</p>
+            <p>등록번호&#160;&#58;&#160;{{ getWishListDetail[0].rlestNum }}</p>
           </div>
 
           <!-- 면적 | 관리비 | 구조 -->
@@ -52,17 +56,17 @@
 
             <div class="col">
               <h4>면적</h4>
-              <p>24m²</p>
+              <p>{{ getWishListDetail[0].roomArea }}m²</p>
             </div>
 
             <div class="col">
               <h4>관리비</h4>
-              <p>10만원</p>
+              <p>{{ numberToKorean(getWishListDetail[0].maintenanceCharge) }}</p>
             </div>
 
             <div class="col">
               <h4>구조</h4>
-              <p>분리형 원룸</p>
+              <p>{{ getWishListDetail[0].structure }}&#160;원룸</p>
             </div>
           </div>
 
@@ -77,7 +81,8 @@
               <span>주차</span>
             </div>
             <div class="col-8">
-              <span>불가능</span>
+              <span v-if="getWishListDetail[0].structure == false">불가능</span>
+              <span v-else>가능</span>
             </div>
           </div>
 
@@ -86,7 +91,8 @@
               <span>엘리베이터</span>
             </div>
             <div class="col-8">
-              <span>없음</span>
+              <span v-if="getWishListDetail[0].elevatorCheck == false">없음</span>
+              <span v-else>있음</span>
             </div>
           </div>
 
@@ -95,7 +101,7 @@
               <span>입주가능일</span>
             </div>
             <div class="col-8">
-              <span>2022.09.01</span>
+              <span>{{ getWishListDetail[0].moveInDay }}</span>
             </div>
           </div>
 
@@ -104,7 +110,7 @@
               <span>관리비</span>
             </div>
             <div class="col-8">
-              <span>10만원</span>
+              <span>{{ numberToKorean(getWishListDetail[0].maintenanceCharge) }}</span>
             </div>
           </div>
 
@@ -113,7 +119,7 @@
               <span>구조</span>
             </div>
             <div class="col-8">
-              <span>분리형 원룸</span>
+              <span>{{ getWishListDetail[0].structure }}&#160;원룸</span>
             </div>
           </div>
 
@@ -122,7 +128,7 @@
               <span>방향</span>
             </div>
             <div class="col-8">
-              <span>남향</span>
+              <span>{{ getWishListDetail[0].direction }}</span>
             </div>
           </div>
 
@@ -131,16 +137,16 @@
               <span>층수</span>
             </div>
             <div class="col-8">
-              <span>3/10층</span>
+              <span>{{ getWishListDetail[0].floor }}층&#47;{{ getWishListDetail[0].totalFloor }}층</span>
             </div>
           </div>
 
-          <div class="row infoContents lastInfo">
+          <div class="row infoContents">
             <div class="col infoHead">
               <span>주소</span>
             </div>
             <div class="col-8">
-              <span>OO구 OO동 1612-10, 301호</span>
+              <span>{{ getWishListDetail[0].rlestAdr }}</span>
             </div>
           </div>
           <!-- 매물 정보 끝 -->
@@ -170,7 +176,7 @@
 
           <!-- 매물 설명 제목 -->
           <div class="row space conInfo">
-            <h3 class="intro-header">등록한 매물 제목</h3>
+            <h3>{{ getWishListDetail[0].postTitle }}</h3>
           </div>
 
           <!-- 매물 설명 내용 -->
@@ -185,12 +191,13 @@
 
           <!-- 중개사무소 소개 제목 -->
           <div class="row space conInfo">
-            <h3 class="intro-header">OOOOO부동산중개사무소<p>02-333-2222</p></h3>
+            <h3>OOOOO부동산중개사무소</h3>
+            <p>02-333-2222</p>
           </div>
 
           <!-- 중개사무소 소개 내용 -->
           <div class="row">
-            <div class="col contents last-con">
+            <div class="col contents">
               <p>🎪 집토스 직영부동산은 깐깐합니다.🎪<br>
                 ✅ 등기부등본을 확인해서 안전한 집✅<br>
                 🎈 건축물대장을 체크해서 자세히 기록한 집🎈<br>
@@ -198,47 +205,86 @@
             </div>
           </div>
 
-          <div class="row" style="margin: 0; padding-bottom: 15px">
-            <!-- 좌측 주소 입력 폼들 -->
-            <div class="d-grid gap-2 col-4 mx-auto">
-              <button @click="test" class="btn btn-danger btnStyle">삭제</button>
-            </div>
-            <div class="d-grid gap-2 col-4 mx-auto">
-              <button class="btn btn-success btnStyle">수정</button>
-            </div>
-            <div class="d-grid gap-2 col-4 mx-auto">
-              <button class="btn btn-info btnStyle postBtn">거래완료</button>
-            </div>
-          </div>
-
         </div>
 
 
       </div>
+
     </div>
+
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 
 export default {
-    name: 'HouseDetails',
-    computed: mapGetters({
-      getWishList: 'getWishList',
-      getELEST: 'getELEST',
-    })
+    name: 'wishListDetails',
+    computed: {
+      ...mapGetters({
+        getWishListState: 'getWishListState',
+        getWishListDetail: 'getWishListDetail',
+        getClickRlestNumber: 'getClickRlestNumber'
+      })
+    }
+    ,
+    components: {
+      ImgModal: 'ImgModal'
+    }
     ,
     methods: {
       // 뒤로가기 버튼
       goBack() {
-        this.$router.go(-1);
+        this.$router.push('myList');
+        this.$router.go();
       }
       ,
-      test() {
-        // confirm('매물번호 [' + this.getELEST[0].rlest_num + ']을(를) 삭제하시겠습니까?');
-        alert('매물번호 [' + this.getELEST[0].rlest_num + ']을(를) 삭제할 수 없습니다!\n - 거래완료 처리 후 다시 시도해주세요!');
+      // 받아온 금액을 한글로 변환
+      numberToKorean(number){
+        let inputNumber  = number < 0 ? false : number;
+        let unitWords    = ['', '만원', '억', '조', '경'];
+        let splitUnit    = 10000;
+        let splitCount   = unitWords.length;
+        let resultArray  = [];
+        let resultString = '';
+
+        for (let i = 0; i < splitCount; i++){
+          let unitResult = (inputNumber % Math.pow(splitUnit, i + 1)) / Math.pow(splitUnit, i);
+          unitResult = Math.floor(unitResult);
+          if (unitResult > 0){
+            resultArray[i] = unitResult;
+          }
+        }
+
+        for (let i = 0; i < resultArray.length; i++){
+          if(!resultArray[i]) continue;
+          resultString = String(resultArray[i]) + unitWords[i] + resultString;
+        }
+
+        return resultString;
+      }
+      ,
+      wishListCtrDel() {
+        this.$store.dispatch('wishListCtrDel')
+      }
+      ,
+      wishListCheck() {
+        this.$store.dispatch('wishListCheck')
+      }
+    }
+    ,
+    action: {
+      wishListCtrDel() {
+        this.$store.dispatch('wishListCtrDel')
+      }
+      ,
+      wishListCheck() {
+        this.$store.dispatch('wishListCheck')
       }
 
+    }
+    ,
+    created() {
+      this.wishListCheck();
     }
 }
 </script>
@@ -248,7 +294,7 @@ li, ul, ol {
   list-style: none;
 }
 
-#HouseDetails {
+#wishListDetails {
   width: 100%;
   height: calc(100vh - 160px);
 

@@ -4,8 +4,8 @@
 
     <!-- 전체 회원 목록 불러오기 -->
     <select id="getMemberList" resultType="Member">
-        SELECT /* getMemberList(회원목록조회) */
-               email
+        /* [MemberMapper.xml] [getMemberList] [회원목록조회] */
+        SELECT email
              , mmbr_pw
              , crt_id
              , crt_dttm
@@ -16,26 +16,29 @@
     
     <!-- 회원 가입 -->
     <insert id="join">
-        INSERT
-        INTO MEMBER
-        VALUES(
-               #{email}
-             , SHA2(#{mmbrPw}, 256)
-             , 'admin123'
-             , now()
-             , 'admin123'
-             , now()
-             )
+        /* [MemberMapper.xml] [join] [회원 가입] */
+        INSERT INTO MEMBER
+        (    email
+           , mmbr_pw
+           , crt_id
+           , upd_id
+        )
+        VALUES
+        (    #{email}
+           , SHA2(#{mmbrPw}, 256)
+           , #{email}
+           , #{email}
+        )
     </insert>
 
     <!-- 로그인 처리 -->
     <select id="login" parameterType="Member" resultType="Member">
+        /* [MemberMapper.xml] [login] [로그인 처리] */
         SELECT email
              , mmbr_pw
-        FROM MEMBER
-        WHERE email   = #{email}
-        AND   mmbr_pw = SHA2(#{mmbrPw}, 256)
-
+          FROM MEMBER
+         WHERE email = #{email}
+           AND mmbr_pw = SHA2(#{mmbrPw}, 256)
     </select>
 
 

@@ -9,6 +9,39 @@
         <div v-else-if="getRlestListAll.length === 0">
           <h2 style="font-size: 1.2rem; text-align: center; padding: 30px 0">조건에 만족하는 매물이 없습니다!</h2>
         </div>
+
+        <div  v-if="getRlestListAll.length != 0" class="row" style="padding-top: 20px;">
+          <div class="col-2"></div>
+          <div class="col-8">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination"  style="justify-content: center; text-align: center">
+
+                <li @click="setCurrentPage(getPaging.before)" class="page-item">
+                  <a class="page-link" aria-label="Previous">
+                    <span aria-hidden="true">
+                      <i class="fa-solid fa-chevron-left" id="leftBtn"/>
+                    </span>
+                  </a>
+                </li>
+
+                <li v-for="(currentNum, i) in range(getPaging.startPage, getPaging.endPage)" :key="i" class="page-item">
+                  <a @click="setCurrentPage(currentNum)" class="page-link">{{currentNum}}</a>
+                </li>
+
+
+                <li v-if="getPaging.nextSection == true" class="page-item">
+                  <a class="page-link" @click="setCurrentPage(getPaging.forward)" aria-label="Next">
+                    <span aria-hidden="true">
+                      <i class="fa-solid fa-chevron-right" id="rightBtn"/>
+                    </span>
+                  </a>
+                </li>
+
+              </ul>
+            </nav>
+            <div class="col-2"></div>
+          </div>
+        </div>
     </div>
 </template>
 
@@ -28,13 +61,15 @@ export default {
       mapGetters({
         getRlestListAll: 'getRlestListAll',
         getClickRlestNumber: 'getClickRlestNumber',
-        getRlestDetail: 'getRlestDetail'
+        getRlestDetail: 'getRlestDetail',
+        getListCount: 'getListCount',
+        getPagingSection: 'getPagingSection',
+        getCurrentPage: 'getCurrentPage',
+        getPaging: 'getPaging'
     })
     ,
 
-    methods:
-    {
-
+    methods: {
       getRlestList() {
         this.$store.dispatch('getRlestList')
 
@@ -43,8 +78,25 @@ export default {
       rlestDetail() {
         this.$store.dispatch('rlestDetail')
       }
-
-
+      ,
+      setCurrentPage(e) {
+        console.log(e);
+        this.$store.commit('setCurrentPage', e);
+      }
+      ,
+      BEFORE_NUM() {
+        this.$store.commit('BEFORE_NUM')
+      }
+      ,
+      NEXT_NUM() {
+        this.$store.commit('NEXT_NUM')
+      }
+      ,
+      range: function (start, end){
+        let list = []
+        for (let i = start; i <= end ; i ++) list.push(i);
+        return list;
+      }
     }
 
     ,
@@ -62,6 +114,14 @@ export default {
 
     mounted() {
       this.getRlestList();
+    }
+    ,
+    // 페이징 처리 번호를 받아옴
+    watch: {
+      getCurrentPage: function() {
+        console.log('watcher')
+        this.getRlestList();
+      }
     }
 
 }

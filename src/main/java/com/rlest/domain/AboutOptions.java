@@ -18,6 +18,7 @@ public class AboutOptions {
 
 	private int 	rlestNum;	// int(8)	 	'매물 번호'
 	private String 	optNum;		// varchar(3)	'옵션 번호(코드)'
+	private String  optName;	// varchar(10)  '옵션명(한글명)'
 	private String 	crtId;		// varchar(30)	'생성자ID'
 	private String 	crtDttm;	// datetime	 	'생성일시'
 	private String 	updId;		// varchar(30) 	'수정자 ID'

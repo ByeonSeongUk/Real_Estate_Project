@@ -3,7 +3,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import router from "../router";
-import ELEST from '../assets/dummy-data/Real_estate';
+
 
 Vue.use(Vuex);
 
@@ -17,12 +17,10 @@ export const store = new Vuex.Store({
 
     // Data
     state: {
-        // Dummy
-        ELEST: [...ELEST],
 
         // Data
-        loginCheck: false, // 로그인 체크
-        wishList: true, // 위시리스트
+        loginCheck: 1, // 로그인 체크
+        loginId: '', // 로그인 되어 있는 아이디
         searchAdr: '', // 검색한 주소
         deposit: 0, // 보증금
         monthlyRent: 0, // 월세
@@ -48,16 +46,38 @@ export const store = new Vuex.Store({
         rlestList:[]
         ,
         // 클릭한 매물의 리스트 번호
-        clickRlestNumber: 11211212
+        clickRlestNumber: 0
         ,
-        // 매물 목록
+        // 매물 상세
         rlestDetail:[]
         ,
-
-
-
-
-
+        // 불러온 위시리스트
+        wishList: []
+        ,
+        // 위시리스트 상세
+        wishListDetail: []
+        ,
+        // 위시리스트 상태
+        wishListState: ''
+        ,
+        // 해당 매물의 옵션
+        aboutOptions: []
+        ,
+        // 상세페이지의 주소(지도에 표시할 주소)
+        detailPointer: ''
+        ,
+        // 현재 페이지 번호
+        currentPage: 1
+        ,
+        // 총 불러온 개수
+        listCount: 0
+        ,
+        // 페이징 처리 섹션의 개수
+        pagingSection: 0
+        ,
+        // 페이징 정보
+        paging: []
+        ,
         //////////////////////////////// Test ///////////////////////////////
         currentIndex: 0,
         oneroomsImgs: [
@@ -77,15 +97,19 @@ export const store = new Vuex.Store({
 
     // Getters
     getters: {
-
+        // 로그인된 아이디
+        getLoginId: (state) => {
+            return state.loginId;
+        }
+        ,
         // 로그인 체크
         getLoginCheck: (state) => {
             return state.loginCheck;
         }
         ,
-        // 위시리스트
-        getWishList: (state) => {
-            return state.wishList;
+        // 위시리스트 상태
+        getWishListState: (state) => {
+            return state.wishListState;
         }
         ,
         // 검색한 단어(주소)
@@ -133,27 +157,65 @@ export const store = new Vuex.Store({
         ,
         // 불러온 매물 리스트
         getRlestListAll: (state) => {
-            console.log(state.rlestList)
             return state.rlestList;
         }
         ,
         // 클릭한 매물의 매물번호
         getClickRlestNumber: (state) => {
-            console.log(state.clickRlestNumber);
             return state.clickRlestNumber;
         }
         ,
         // 매물 상세 불러오기
         getRlestDetail: (state) => {
-            console.log(state.rlestDetail);
             return state.rlestDetail;
         }
+        ,
+        // 사용자의 위시리스트 불러오기
+        getWishList: (state) => {
+            console.log(state.wishList);
+            return state.wishList;
+        }
+        ,
+        // 사용자의 위시리스트 상세
+        getWishListDetail: (state) => {
+            console.log(state.wishListDetail);
+            return state.wishListDetail
+        }
+        ,
+        // 해당매물의 옵션
+        getAboutOptions: (state) => {
+            console.log(state.aboutOptions);
+            return state.aboutOptions;
+        }
+        ,
+        // 지도 마커
+        getDetailPointer: (state) => {
+            console.log(state.detailPointer);
+            return state.detailPointer;
+        }
+        ,
+        // 보여질 게시물
+        getCurrentPage: (state) => {
+            return state.currentPage
+        }
+        ,
+        // 페이징 정보
+        getPaging: (state) => {
+            return state.paging
+        }
+        ,
+
 
     }
     ,
 
     // Setters
     mutations: {
+        // 위시리스트 상태 변경
+        setWishListState: (state, wishListState) => {
+            state.wishListState = wishListState;
+        }
+        ,
         // 검색한 단어(주소)
         setSearchAdr: (state, searchAdr) => {
             state.searchAdr = searchAdr;
@@ -197,25 +259,21 @@ export const store = new Vuex.Store({
         // 회원가입시 이메일
         setJoinEmail: (state, email) => {
             state.member.email = email;
-            console.log(state.member.email);
         }
         ,
         // 회원가입시 비밀번호
         setJoinPassword: (state, password) => {
             state.member.mmbrPw = password;
-            console.log(state.member.mmbrPw);
         }
         ,
         // 로그인시 아이디(이메일)
         setLoginEmail: (state, email) => {
             state.loginMember.email = email;
-            console.log(state.loginMember.email);
         }
         ,
         // 로그인시 비밀번호
         setLoginPassword: (state, password) => {
             state.loginMember.mmbrPw = password;
-            console.log(state.loginMember.mmbrPw);
         }
         ,
         // DB에서 불러온 매물 리스트 저장
@@ -234,7 +292,46 @@ export const store = new Vuex.Store({
             console.log(rlestDetail);
             state.rlestDetail = rlestDetail;
         }
-
+        ,
+        // DB에서 불러온 위시 리스트 저장
+        setWishList: (state, wishList) => {
+            console.log(wishList);
+            state.wishList = wishList;
+        }
+        ,
+        // 클릭한 위시리스트 상세 불러오기
+        setWishListDetail: (state, wishListDetail) => {
+            console.log(wishListDetail);
+            state.wishListDetail = wishListDetail;
+        }
+        ,
+        // 해당 매물의 옵션
+        setAboutOptions: (state, aboutOptions) => {
+            console.log(aboutOptions);
+            state.aboutOptions = aboutOptions;
+        }
+        ,
+        // 지도 마커
+        setDetailPointer: (state, detailPointer) => {
+            console.log('store: ' + detailPointer);
+            state.detailPointer = detailPointer;
+            console.log(state.detailPointer)
+        }
+        ,
+        // 불러온 총 페이지의 개수
+        setListCount: (state, listCount) => {
+            state.listCount = listCount;
+        }
+        ,
+        // 페이징 정보
+        setPaging: (state, paging) => {
+            state.paging = paging;
+        }
+        ,
+        // 현재 페이지 번호 (Vue에서 받아오는 값)
+        setCurrentPage: (state, currentPage) => {
+            state.currentPage = currentPage;
+        }
 
     }
     ,
@@ -272,14 +369,14 @@ export const store = new Vuex.Store({
 
         }
         ,
-        // 로그인 요청
+        // 로그아웃 요청
         logoutAction: ({commit, state}) => {
 
             axios.post('/logout')
                  .then(res => {
 
                     commit(res.data)
-                    state.loginCheck = false;
+                    state.loginCheck = 1;
                     router.push({name: 'home'})
 
                  })
@@ -300,16 +397,41 @@ export const store = new Vuex.Store({
             axios.post('/login', params)
                 .then(res => {
 
-                    let check = true;
-                    console.log("axios : " + check);
-                    if(check) {
-                        commit(res.data)
-                        state.loginCheck = true;
-                        router.push({name: 'home'})
+                    commit(res.data)
+                    state.loginCheck = 0;
+                    let splitStr = res.data.split('@');
+
+                    console.log(splitStr);
+                    state.loginId = splitStr[0]; // 로그인 된 아이디가 들어옴
+
+                    router.push({name: 'home'})
+
+                })
+                .catch((err) => {
+                    alert('회원정보 불일치!');
+                    console.log(err);
+                });
+        }
+        ,
+        // 로그인 체크(mounted)
+        loginCheck: ({state}) => {
+
+            axios.post('/loginCheck')
+                .then(res => {
+
+                    if(res.data == 1) {
+                        console.log("1");
+                        state.loginCheck = res.data; // 로그인이 안되어 있으면 1이 들어옴
                     }
-                    else{
-                        alert('회원정보 불일치!');
+                    else {
+                        console.log("0");
+                        state.loginCheck = 0;
+                        let splitStr = res.data.split('@');
+
+                        console.log(splitStr);
+                        state.loginId = splitStr[0]; // 로그인 된 아이디가 들어옴
                     }
+
                 })
                 .catch((err) => {
                     console.log(err);
@@ -317,13 +439,17 @@ export const store = new Vuex.Store({
         }
         ,
         // 전체 매물 불러오기
-        getRlestList: ({commit}) => {
+        getRlestList: ({commit, state}) => {
 
-            axios.get('rlest/getRlestList')
+            axios.get('rlest/getRlestList', {
+                    params: {
+                        page: state.currentPage
+                    }
+                })
                 .then(res  => {
-                    console.log('axios : ' + res.data)
-                    commit('setRlestList', res.data)
-
+                    console.log(res)
+                    commit('setRlestList', res.data.list)
+                    commit('setPaging', res.data.paging)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -333,11 +459,6 @@ export const store = new Vuex.Store({
         // 선택 매물 불러오기(매물 상세)
         rlestDetail: ({commit, state}) => {
 
-            // post 으로 form 전송 방식
-            // const params = new URLSearchParams();
-            // params.append('rlestNum', state.clickRlestNumber);
-
-            // get 으로 Params 넘길때 하는 방법!
             axios.get('rlest/getRlestDetail',{
                     params: {
                         rlestNum: state.clickRlestNumber
@@ -353,33 +474,136 @@ export const store = new Vuex.Store({
                 });
         }
         ,
-        // 선택 매물 불러오기(매물 상세)
+        // 조건 검색 매물 불러오기(매물 검색)
         searchRlestList: ({commit, state}) => {
 
-            // post 으로 form 전송 방식
-            // const params = new URLSearchParams();
-            // params.append('rlestNum', state.clickRlestNumber);
-
-            // get 으로 Params 넘길때 하는 방법!
             axios.get('rlest/searchRlestList',{
                 params: {
                     rlestAdr: state.searchAdr,
                     deposit: state.deposit,
                     monthlyRent: state.monthlyRent,
                     rlestSort: state.contract,
-                    structure: state.structure
+                    structure: state.structure,
+                    page: state.currentPage
                 }
             })
                 .then(res  => {
-                    console.log('axios : ' + res.data)
-                    commit('setRlestList', res.data)
-                    router.push({name: 'home'})
+                    console.log(res)
+                    commit('setRlestList', res.data.list)
+                    commit('setPaging', res.data.paging)
                 })
                 .catch((err) => {
                     console.log(err);
                 });
         }
         ,
+        // 위시리스트 추가, 삭제
+        wishListCtrDel: ({commit, state}) => {
+
+            const params = new URLSearchParams();
+            params.append('rlestNum', state.clickRlestNumber);
+
+            axios.post('rlest/wishListCtrDel',params)
+                .then(res  => {
+                    console.log('axios : ' + res.data)
+                    if(res.data == 0) {
+                        alert('로그인 후 진행해주세요!');
+                        router.push({name: 'login'});
+                    }
+                    else if(res.data == 1) {
+                        alert('위시리스트에 추가 완료!');
+                        commit('setWishListState', 1);
+
+                    }
+                    else if(res.data == 2) {
+                        alert('위시리스트에서 삭제 완료!');
+                        commit('setWishListState', 0)
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        ,
+        // 내 위시리스트에 있는지 확인
+        wishListCheck: ({commit, state}) => {
+
+            const params = new URLSearchParams();
+            params.append('rlestNum', state.clickRlestNumber);
+            console.log(params);
+
+            axios.post('rlest/wishListCheck',params)
+                .then(res  => {
+                    console.log('axios wish: ' + res.data);
+                    commit('setWishListState', res.data);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        ,
+        // 사용자의 위시리스트 불러오기
+        getMyWishList: ({commit, state}) => {
+
+            axios.get('../rlest/getWishList')
+                 .then(res => {
+                     if(res.data.length != 0) {
+                         commit('setWishList', res.data)
+                     }
+                     else if (state.loginCheck == 1) {
+                         alert('로그인 후 위시리스트 접근 가능!');
+                         router.push({name: 'login'});
+                     }
+                     else if(res.data.length == 0) {
+                         alert('위시리스트 없음!');
+                     }
+                 })
+                 .catch((err) => {
+                   console.log(err);
+                 })
+        }
+        ,
+
+        // 선택 매물 불러오기(매물 상세)
+        wishListDetail: ({commit, state}) => {
+
+            axios.get('../rlest/getRlestDetail',{
+                params: {
+                    rlestNum: state.clickRlestNumber
+                }
+            })
+                .then(res  => {
+                    console.log('axios : ' + res.data)
+                    commit('setWishListDetail', res.data)
+                    console.log(state.wishListDetail)
+                    router.push({name: 'wlDetail'})
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+        ,
+        // 상세페이지 옵션 정보 불러오기
+        aboutOptions: ({commit, state}) => {
+            console.log('test test tes t : ' + state.clickRlestNumber)
+            axios.get('rlest/getAboutOptions', {
+                params: {
+                    rlestNum: state.clickRlestNumber
+                }
+            })
+                .then(res => {
+                    // let optionBox = new Array;
+                    //
+                    // for(let i = 0; i < res.data.length; i++) {
+                    //     optionBox.push(res.data[i].optNum);
+                    // }
+                    // commit('setAboutOptions', optionBox);
+                    commit('setAboutOptions', res.data);
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
+        }
     }
 
 

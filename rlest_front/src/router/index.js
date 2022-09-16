@@ -20,6 +20,8 @@ export default new VueRouter({
     {path: '/main', redirect: '/houseBox'},
     {path: '/wishlist', redirect: 'wishlist/myList'},
     {path: '/detail', name:'detail', redirect: '/houseDetails'},
+    {path: '/reLogin', name:'login', redirect: '/login'},
+    {path: 'wlDetail', name:'wlDetail', redirect: '/myListDetails'},
 
 
     // View Import
@@ -41,8 +43,8 @@ export default new VueRouter({
     {
       path: '/wishlist', component: () => import('../views/WishListView'),
       children: [
-        {path: '/wishlist/myList', component: WishListBox},
-        {path: '/wishlist/myListDetails', component: WishListDetails}
+        {path: '/myList', component: WishListBox},
+        {path: '/myListDetails', component: WishListDetails}
       ]
     },
 

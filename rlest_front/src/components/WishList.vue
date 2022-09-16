@@ -1,21 +1,17 @@
 <!-- 매물 컴포넌트 -->
 <template>
-    <div id="HouseList" @click="setClickRlestNumber(getRlestListAll.rlestNum)">
+    <div id="WishList">
         <div class="oneroomImg">
 <!--            <img :src="require(`@/assets/images/orImg${getELEST.rlest_num}.jpeg`)" alt="원룸사진"/>-->
         </div>
 
-        <div class="oneroomInfo">
-<!--          <div class="wishList">-->
-<!--            <a v-if="getWishList == 1" href=""><i class="fa-solid fa-heart"></i></a>-->
-<!--            <a v-if="getWishList == 0" href=""><i class="fa-regular fa-heart"></i></a>-->
-<!--          </div>-->
-          <p class="info_content">{{ getRlestListAll.structure }} 원룸</p>
-          <h4 v-if="getRlestListAll.rlestSort == '전세'" class="info_header">{{ getRlestListAll.rlestSort }}&#160;{{ numberToKorean(getRlestListAll.deposit) }}</h4>
-          <h4 v-else class="info_header">{{ getRlestListAll.rlestSort }}&#160;{{ numberToKorean(getRlestListAll.deposit) }}&#160;&#47;&#160;{{ numberToKorean(getRlestListAll.monthlyRent) }}</h4>
-          <p class="info_content">{{ getRlestListAll.roomArea}}m², {{ getRlestListAll.floor }} 층</p>
-          <p class="info_content">{{ getRlestListAll.rlestAdr }}</p>
-          <p class="info_content">{{ getRlestListAll.rlestIntro }}</p>
+        <div class="oneroomInfo" @click="setClickRlestNumber(getWishList.rlestNum)">
+
+          <p class="info_content">{{ getWishList.structure }} 원룸</p>
+          <h4 class="info_header">{{ getWishList.rlestSort }} {{ numberToKorean(getWishList.deposit) }} / {{ numberToKorean(getWishList.monthlyRent) }}</h4>
+          <p class="info_content">{{ getWishList.roomArea}}m², {{ getWishList.floor }} 층</p>
+          <p class="info_content">{{ getWishList.rlestAdr }}</p>
+          <p class="info_content">{{ getWishList.rlestIntro }}</p>
         </div>
     </div>
 </template>
@@ -25,19 +21,18 @@
 import {mapGetters} from "vuex";
 
 export default {
-    name: 'HouseList',
+    name: 'WishList',
     props: {
-      getRlestListAll: Object, // 매물 리스트
+      getWishList: Object, // 매물 리스트
     }
     ,
     computed: {
       ...mapGetters([
-          'getRlestDetail'
+          'getWishListDetails'
       ])
     }
     ,
     methods: {
-
         setClickRlestNumber(e) {
           console.log(e);
           this.$store.commit('setClickRlestNumber', e)
@@ -85,7 +80,7 @@ export default {
 </script>
 
 <style scoped>
-#HouseList {
+#WishList {
     display: flex;
     width: 100%;
     height: auto;
@@ -93,11 +88,11 @@ export default {
     background-color: white;
     border-left: 0.5px solid RGB(225, 225, 225);
 }
-#HouseList:hover {
+#WishList:hover {
   background: rgb(225, 225, 225);
 }
 
-#HouseList .oneroomImg {
+#WishList .oneroomImg {
     display: block;
     width: 150px;
     height: 120px;
@@ -105,12 +100,12 @@ export default {
     background: darkseagreen;
 }
 
-#HouseList .oneroomImg > img {
+#WishList .oneroomImg > img {
     width: 100%;
     height: 100%;
 }
 
-#HouseList .oneroomInfo {
+#WishList .oneroomInfo {
     display: block;
     width: 80%;
     height: 100%;
@@ -145,7 +140,7 @@ export default {
 }
 
 @media screen and (max-width: 800px) {
-  #HouseList {
+  #WishList {
     width: 100%;
   }
 }

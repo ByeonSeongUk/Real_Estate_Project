@@ -42,4 +42,8 @@ public class RealEstate {
 	private String 	updId;				// varchar(30)	 '수정자 ID'
 	private String 	updDttm;			// datetime 	 '수정일시'
 
+	private int		LIMIT;				// 최대 보여질 페이지 수
+	private int		pageNum;			// 현재 페이지 수
+	private int		pageSize;			// 페이징 사이즈
+
 }

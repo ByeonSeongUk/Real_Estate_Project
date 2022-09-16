@@ -3,7 +3,8 @@
 <mapper namespace="com.rlest.mappers.RlestMapper">
 
     <!--  매물 전체 리스트 불러오기  -->
-    <select id="getRlestList" resultType="RealEstate">
+    <select id="getRlestList" parameterType="Paging" resultType="RealEstate">
+        /* [RlestMapper.xml] [getRlestList] [매물 전체 리스트 불러오기] */
         SELECT rlest_num
              , brkr_id
              , rlest_adr
@@ -27,13 +28,25 @@
              , DATE_FORMAT(crt_dttm, '%Y. %m. %d') AS crt_dttm
              , upd_id
              , upd_dttm
-        FROM
-            real_estate;
+          FROM real_estate
+         WHERE delete_status_check = 0
+      ORDER BY trans_status_check DESC,
+               crt_dttm           DESC
+         LIMIT #{offset}
+        OFFSET #{limitStart}
     </select>
 
+    <!-- 매물 전체 카운트 -->
+    <select id="rlestCount" parameterType="Paging" resultType="int">
+        /* [RlestMapper.xml] [rlestCount] [매물 전체 카운트] */
+        SELECT count(*)
+          FROM real_estate
+         WHERE delete_status_check = 0;
+    </select>
 
     <!-- 선택 매물 리스트 불러오기 -->
     <select id="getRlestDetail" resultType="RealEstate">
+        /* [RlestMapper.xml] [getRlestDetail] [선택 매물 리스트 불러오기] */
         SELECT rlest_num
              , brkr_id
              , rlest_adr
@@ -55,14 +68,13 @@
              , delete_status_check
              , crt_id
              , DATE_FORMAT(crt_dttm, '%Y년 %m월 %d일') AS crt_dttm
-        FROM
-            real_estate
-        WHERE
-            rlest_num = #{rlestNum};
+          FROM real_estate
+         WHERE rlest_num = #{rlestNum};
     </select>
 
-    <!-- 검색한 매물 불러오기 -->
-    <select id="searchRlestList" resultType="RealEstate">
+    <!-- 조건 검색한 매물 불러오기 -->
+    <select id="searchRlestList" parameterType="hashMap" resultType="RealEstate">
+        /* [RlestMapper.xml] [searchRlestList] [조건 검색한 매물 불러오기] */
         SELECT rlest_num
              , brkr_id
              , rlest_adr
@@ -89,28 +101,109 @@
         FROM
             real_estate
         WHERE 1=1
+           AND delete_status_check = 0
         <!-- 검색 단어 -->
-        <if test="rlestAdr != ''">
-            AND rlest_adr like CONCAT('%',#{rlestAdr},'%')
+        <if test="realEstate.rlestAdr != ''">
+           AND rlest_adr like CONCAT('%',#{realEstate.rlestAdr},'%')
         </if>
         <!-- 계약 구분 -->
-        <if test="rlestSort != ''">
-            AND rlest_sort = #{rlestSort}
+        <if test="realEstate.rlestSort != ''">
+           AND rlest_sort = #{realEstate.rlestSort}
         </if>
         <!-- 보증금 금액 -->
-        <if test="deposit != 0">
-            AND deposit = #{deposit}
+        <if test="realEstate.deposit != 0">
+           AND deposit = #{realEstate.deposit}
         </if>
         <!-- 월세 금액 -->
-        <if test="monthlyRent != 0">
-            AND deposit = #{monthlyRent}
+        <if test="realEstate.monthlyRent != 0">
+           AND deposit = #{realEstate.monthlyRent}
         </if>
         <!-- 방의 구조 -->
-        <if test="structure != ''">
-            AND structure = #{structure}
+        <if test="realEstate.structure != ''">
+           AND structure = #{realEstate.structure}
         </if>
+        ORDER BY trans_status_check DESC,
+                 crt_dttm           DESC
+           LIMIT #{paging.offset}
+          OFFSET #{paging.limitStart}
     </select>
-    
+
+    <!-- 위시리스트 체크 -->
+    <select id="getWishListCheck" resultType="int">
+        /* [RlestMapper.xml] [getWishListCheck] [위시리스트 체크] */
+        SELECT count(email)
+          FROM wish_list
+         WHERE email = #{email}
+           AND rlest_num = #{rlestNum}
+
+
+    </select>
+
+    <!-- 위시리스트 추가 -->
+    <insert id="wishListCtr">
+        /* [RlestMapper.xml] [wishListCtr] [위시리스트 추가] */
+        INSERT INTO wish_list
+        (    email
+           , rlest_num
+           , crt_id
+        )
+        values
+        (    #{email}
+           , #{rlestNum}
+           , #{email}
+        )
+    </insert>
+
+    <!-- 위시리스트 삭제 -->
+    <delete id="wishListDel">
+        /* [RlestMapper.xml] [wishListDel] [위시리스트 삭제] */
+        DELETE
+          FROM wish_list
+         WHERE email = #{email}
+           AND rlest_num = #{rlestNum}
+    </delete>
+
+    <!-- 로그인한 사용자의 위시리스트 조회 -->
+    <select id="getWishList" parameterType="WishList" resultType="RealEstate">
+        /* [RlestMapper.xml] [getWishList] [로그인한 사용자의 위시리스트 조회] */
+        SELECT r.rlest_num
+             , r.brkr_id
+             , r.rlest_adr
+             , r.rlest_sort
+             , r.deposit
+             , r.monthly_rent
+             , r.maintenance_charge
+             , r.room_area
+             , r.structure
+             , r.direction
+             , r.floor
+             , r.total_floor
+             , r.parking_check
+             , r.elevator_check
+             , r.move_in_day
+             , r.post_title
+             , r.rlest_intro
+             , r.trans_status_check
+             , r.delete_status_check
+             , r.crt_id
+             , DATE_FORMAT(r.crt_dttm, '%Y년 %m월 %d일') AS crt_dttm
+             , w.email
+          FROM real_estate r
+     LEFT JOIN wish_list w
+            ON r.rlest_num = w.rlest_num
+         WHERE w.email = #{email};
+    </select>
+
+    <!-- 해당 매물에 옵션 목록 불러오기 -->
+    <select id="getAboutOptions" parameterType="int" resultType="AboutOptions">
+        /* [RlestMapper.xml] [getAboutOptions] [해당 매물에 옵션 목록 불러오기] */
+        SELECT ao.opt_num
+             , o.opt_name
+          FROM about_options ao
+    INNER JOIN options o
+            ON ao.opt_num = o.opt_num
+         WHERE rlest_num = #{rlestNum};
+    </select>
 </mapper>
 
 

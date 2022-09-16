@@ -1,24 +1,72 @@
 <template>
   <div id="WishListBox">
-    <router-link to="myListDetails" class="houseList">
-      <HouseList :getELEST="getELEST[i]" v-for="(roomList, i) in getELEST" :key="i" class="houseList"/>
-    </router-link>
+    <div to="myListDetails" class="houseList" @click="wishListDetail">
+      <WishList :getWishList="getWishList[i]" v-for="(wishList, i) in getWishList" :key="i" class="HouseList"/>
+    </div>
   </div>
 </template>
 
 <script>
-import {mapGetters} from "vuex";
-import HouseList from "@/components/HouseList";
+import { mapGetters } from "vuex";
+import WishList from "@/components/WishList";
 
 export default {
   name: "WishListBox",
 
-  computed: mapGetters({
-    getELEST: 'getELEST'
-  }),
+  computed:
+    mapGetters({
+      getWishList: 'getWishList'
+    }),
 
   components: {
-    HouseList
+    WishList
+  }
+  ,
+
+  methods: {
+    getWishList() {
+      this.$store.dispatch('getRlestList')
+
+    }
+    ,
+    getWishListDetails() {
+      this.$store.dispatch('rlestDetail')
+    }
+    ,
+    wishListDetail() {
+      this.$store.dispatch('wishListDetail')
+    }
+    ,
+    // 무한스크롤 정의
+    handleNotificationListScroll : function() {
+      console.log("작동체크")
+      const {scrollHeight, scrollTop, clientHeight} = this.$refs.scrollTarget//e.target;//
+      const isAtTheBottom = scrollHeight === scrollTop + clientHeight;
+      console.log(scrollHeight, scrollTop, clientHeight, isAtTheBottom)
+      // 일정 한도 밑으로 내려오면 함수 실행
+      if (isAtTheBottom) this.getData();
+    }
+  }
+
+  ,
+  action: {
+    getWishList() {
+      this.$store.dispatch('getRlestList')
+
+    }
+    ,
+    getWishListDetails() {
+      this.$store.dispatch('rlestDetail')
+    }
+    ,
+    wishListDetail() {
+      this.$store.dispatch('wishListDetail')
+    }
+  }
+  ,
+  mounted() {
+    // 무한 스크롤
+    window.addEventListener('scroll', this.handleNotificationListScroll)
   }
 
 }

@@ -1,6 +1,6 @@
 a<template>
   <div class="main">
-    <HouseMap :deposit="deposit" :monthlyRent="monthlyRent"></HouseMap>
+    <HouseMap></HouseMap>
   </div>
 </template>
 
@@ -8,20 +8,9 @@ a<template>
 import HouseMap from '../components/HouseMap.vue'
 
 export default {
-  data() {
-    return {
-      deposit: 0, // 보증금
-      monthlyRent: 0, // 월세
-      contract: 'contractAll', // 계약 방법(전체, 전세, 월세)
-      structure: 'structureAll', // 방구조
-    }
-  },
-
+  name: "MainView",
   components: {
     HouseMap
-  },
-  updated() {
-    this.monthlyRent = 0;
   }
 
 }
@@ -34,6 +23,12 @@ export default {
     display: none;
   }
 
+  #map {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 430px) {
   .loginBtn {
     display: none;
   }

@@ -19,6 +19,23 @@ export default {
   components: {
     NavBar
   }
+  ,
+  methods: {
+    loginCheck() {
+      this.$store.dispatch('loginCheck');
+    }
+  }
+  ,
+  action: {
+    loginCheck() {
+      this.$store.dispatch('loginCheck');
+    }
+  }
+  ,
+  mounted() {
+    this.loginCheck();
+  }
+
 }
 </script>
 

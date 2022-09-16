@@ -1,118 +1,176 @@
 <template>
+
   <div>
     <div id="map"></div>
-    <!--    <div class="button-group">-->
-    <!--      <button @click="changeSize(0)">Hide</button>-->
-    <!--      <button @click="changeSize(400)">show</button>-->
-    <!--      <button @click="displayMarker(markerPositions1)">marker set 1</button>-->
-    <!--      <button @click="displayMarker(markerPositions2)">marker set 2</button>-->
-    <!--      <button @click="displayMarker([])">marker set 3 (empty)</button>-->
-    <!--      <button @click="displayInfoWindow">infowindow</button>-->
-    <!--    </div>-->
+<!--\-->
   </div>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
+
 export default {
-  name: "KakaoMap",
+  name: "KakaoMap"
+  ,
+
   data() {
     return {
-      markerPositions1: [
-        [33.452278, 126.567803],
-        [33.452671, 126.574792],
-        [33.451744, 126.572441],
-      ],
-      markerPositions2: [
-        [37.499590490909185, 127.0263723554437],
-        [37.499427948430814, 127.02794423197847],
-        [37.498553760499505, 127.02882598822454],
-        [37.497625593121384, 127.02935713582038],
-        [37.49629291770947, 127.02587362608637],
-        [37.49754540521486, 127.02546694890695],
-        [37.49646391248451, 127.02675574250912],
-      ],
+      map: null,
+      geocoder: null,
       markers: [],
-      infowindow: null,
-    };
-  },
+      latitude: 0,
+      longitude: 0
+    }
+  }
+  ,
+  computed:
+    mapGetters({
+      getDetailPointer: 'getDetailPointer'
+    })
+
+  ,
   mounted() {
-    if (window.kakao && window.kakao.maps) {
-      this.initMap();
-    } else {
       const script = document.createElement("script");
       /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src =
-          "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=915cffed372954b7b44804ed422b9cf0";
+      script.src = "//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=64c1e136c39b4d5babf8df5c8ac78958&libraries=services";
+
       document.head.appendChild(script);
+    //
+  }
+  ,
+  // state의 매물의 주소가 변할때마다 마커 주소 이동
+  watch: {
+    getDetailPointer: function() {
+      console.log('watcher')
+      this.detailMarker(this.getDetailPointer);
     }
-  },
+  }
+  ,
   methods: {
     initMap() {
-      const container = document.getElementById("map");
+      const container = document.getElementById("map"); // 지도를 표시할 div
       const options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 5,
+        center: new kakao.maps.LatLng(37.566680, 126.978527), // 지도의 중심 좌표(시작점)
+        level: 5, // 지도의 확대 레벨
       };
+      const map = new kakao.maps.Map(container, options);
+      this.map = map;
 
-      //지도 객체를 등록합니다.
-      //지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
-      this.map = new kakao.maps.Map(container, options);
-    },
-    changeSize(size) {
-      const container = document.getElementById("map");
-      container.style.width = `${size}px`;
-      container.style.height = `${size}px`;
-      this.map.relayout();
-    },
-    displayMarker(markerPositions) {
-      if (this.markers.length > 0) {
-        this.markers.forEach((marker) => marker.setMap(null));
-      }
+      // // 지도를 클릭한 위치에 표출할 마커
+      // const marker = new kakao.maps.Marker({
+      //   position: map.getCenter() // 지도 중심좌표에 마커를 생성
+      // });
+      // //  지도에 마커를 표시
+      // marker.setMap(this.map);
 
-      const positions = markerPositions.map(
-          (position) => new kakao.maps.LatLng(...position)
-      );
+      // 주소-좌표 변환 객체를 생성
+      this.geocoder = new kakao.maps.services.Geocoder();
+      console.log(this.geocoder.addressSearch)
+      // 주소로 좌표를 검색합니다
+      this.geocoder.addressSearch(this.getDetailPointer, function (result, status) {
+        // console.log(status);
+        // 정상적으로 검색이 완료됐으면®
+        if (status === kakao.maps.services.Status.OK) {
 
-      if (positions.length > 0) {
-        this.markers = positions.map(
-            (position) =>
-                new kakao.maps.Marker({
-                  map: this.map,
-                  position,
-                })
-        );
+          const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-        const bounds = positions.reduce(
-            (bounds, latlng) => bounds.extend(latlng),
-            new kakao.maps.LatLngBounds()
-        );
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          const marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+          });
 
-        this.map.setBounds(bounds);
-      }
-    },
-    displayInfoWindow() {
-      if (this.infowindow && this.infowindow.getMap()) {
-        //이미 생성한 인포윈도우가 있기 때문에 지도 중심좌표를 인포윈도우 좌표로 이동시킨다.
-        this.map.setCenter(this.infowindow.getPosition());
-        return;
-      }
+          // 인포윈도우로 장소에 대한 설명을 표시합니다
+          const infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">매물 주소</div>'
+          });
+          infowindow.open(map, marker);
 
-      var iwContent = '<div style="padding:5px;">Hello World!</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-          iwPosition = new kakao.maps.LatLng(33.450701, 126.570667), //인포윈도우 표시 위치입니다
-          iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
-
-      this.infowindow = new kakao.maps.InfoWindow({
-        map: this.map, // 인포윈도우가 표시될 지도
-        position: iwPosition,
-        content: iwContent,
-        removable: iwRemoveable,
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.setCenter(coords);
+        }
       });
 
-      this.map.setCenter(iwPosition);
-    },
-  },
-};
+      // // 반경만들기
+      // let circle = new kakao.maps.Circle({
+      //   map: this.map,
+      //   center : new kakao.maps.LatLng(this.latitude, this.longitude),
+      //   radius: this.distance,
+      //   strokeWeight: 1,
+      //   strokeColor: '#00a0e9',
+      //   strokeOpacity: 0.1,
+      //   strokeStyle: 'solid',
+      //   fillColor: '#00a0e9',
+      //   fillOpacity: 0.2
+      // });
+      // circle.setMap(this.map);
+      //
+      // // 클릭한 곳 좌표 받아오기
+      // kakao.maps.event.addListener(this.map, 'click', function(mouseEvent) {
+      //
+      //   // 클릭한 위도, 경도 정보를 가져옴
+      //   let latlng = mouseEvent.latLng;
+      //   this.latitude = latlng.getLat()                //바인딩되지 않음.
+      //   this.longitude = latlng.getLng()
+      //   console.log(this.latitude, this.longitude)
+
+      // // 원 중심좌표 이동
+      // if(circledis == true && this.distance != 0){
+      //   let position = new kakao.maps.LatLng(this.latitude, this.longitude);
+      //   circle.setPosition(position);
+      // }
+
+      // // 마커 위치를 클릭한 위치로 옮깁니다
+      // marker.setPosition(latlng);
+      //   });
+      },
+    detailMarker(e) {
+      const container = document.getElementById("map"); // 지도를 표시할 div
+      const options = {
+        center: new kakao.maps.LatLng(37.566680, 126.978527), // 지도의 중심 좌표(시작점)
+        level: 5, // 지도의 확대 레벨
+      };
+      const map = new kakao.maps.Map(container, options);
+      // this.map = map;
+
+      // 주소-좌표 변환 객체를 생성
+      this.geocoder = new kakao.maps.services.Geocoder();
+      console.log(this.geocoder.addressSearch)
+      // 주소로 좌표를 검색합니다
+      this.geocoder.addressSearch(e, function(result, status) {
+        // console.log(status);
+        // 정상적으로 검색이 완료됐으면®
+        if (status === kakao.maps.services.Status.OK) {
+
+          const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          const marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+          });
+
+          // 인포윈도우로 장소에 대한 설명을 표시합니다
+          const infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;border-radius:5px;padding:6px 0;">매물 주소</div>'
+          });
+          infowindow.open(map, marker);
+
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.setCenter(coords);
+        }
+      });
+    }
+
+
+  }
+
+
+
+
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -128,7 +186,7 @@ export default {
   z-index: 9999;
   position: absolute;
   top: 500px;
-  left: 500px;
+  left: 200px;
 }
 button {
   margin: 0 3px;

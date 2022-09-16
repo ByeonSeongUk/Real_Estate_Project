@@ -22,7 +22,7 @@
                 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><router-link class="dropdown-item dropdown-style" to="/">방 찾기</router-link></li>
-                            <li><router-link class="dropdown-item dropdown-style" to="/wishlist">찜한 매물</router-link></li>
+                            <li><router-link class="dropdown-item dropdown-style" to="/myList">찜한 매물</router-link></li>
                             <li><router-link class="dropdown-item dropdown-style" to="/registration">방 내놓기&#40;전월세만&#41;</router-link></li>
                         </ul>
                     </div>
@@ -37,12 +37,12 @@
         <!-- 로그인 / 회원가입 버튼 -->
         <div class="form-group loginBtn">
             <!-- 로그인전 보이는 버튼 -->
-            <router-link v-if="getLoginCheck == false" to="/login" class="btn btn-outline-primary btnStyle">로그인 및 회원가입</router-link>
+            <router-link v-if="getLoginCheck == 1" to="/login" class="btn btn-outline-primary btnStyle">로그인 및 회원가입</router-link>
 
             <!-- 로그인시 보이는 버튼 -->
-            <div v-if="getLoginCheck == true" class="dropdown" aria-labelledby="dropdownMenuButton1">
+            <div v-if="getLoginCheck == 0" class="dropdown" aria-labelledby="dropdownMenuButton1">
               <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                회원명
+                {{ getLoginId }}
               </button>
 
               <ul class="dropdown-menu">
@@ -68,20 +68,33 @@ export default {
     name: "navBar",
 
     computed: mapGetters({
-      getLoginCheck: 'getLoginCheck'
+      getLoginCheck: 'getLoginCheck',
+      getLoginId: 'getLoginId'
     })
     ,
     methods: {
-     logoutAction() {
-       this.$store.dispatch('logoutAction');
-     }
+      logoutAction() {
+        this.$store.dispatch('logoutAction');
+      }
+      ,
+      loginCheck() {
+        this.$store.dispatch('loginCheck');
+      }
     }
     ,
     action: {
       logoutAction() {
-        this.$store.dispatch('logoutAction')
+        this.$store.dispatch('logoutAction');
 
       }
+      ,
+      loginCheck() {
+        this.$store.dispatch('loginCheck');
+      }
+    }
+    ,
+    mounted() {
+        this.loginCheck();
     }
 
 

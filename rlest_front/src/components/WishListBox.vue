@@ -37,36 +37,25 @@ export default {
       this.$store.dispatch('wishListDetail')
     }
     ,
-    // 무한스크롤 정의
-    handleNotificationListScroll : function() {
-      console.log("작동체크")
-      const {scrollHeight, scrollTop, clientHeight} = this.$refs.scrollTarget//e.target;//
-      const isAtTheBottom = scrollHeight === scrollTop + clientHeight;
-      console.log(scrollHeight, scrollTop, clientHeight, isAtTheBottom)
-      // 일정 한도 밑으로 내려오면 함수 실행
-      if (isAtTheBottom) this.getData();
+    getMyWishList() {
+      this.$store.dispatch('getMyWishList')
     }
+    ,
+
   }
+
 
   ,
   action: {
-    getWishList() {
-      this.$store.dispatch('getRlestList')
-
+    getMyWishList() {
+      this.$store.dispatch('getMyWishList')
     }
     ,
-    getWishListDetails() {
-      this.$store.dispatch('rlestDetail')
-    }
-    ,
-    wishListDetail() {
-      this.$store.dispatch('wishListDetail')
-    }
   }
   ,
+
   mounted() {
-    // 무한 스크롤
-    window.addEventListener('scroll', this.handleNotificationListScroll)
+    this.getMyWishList();
   }
 
 }

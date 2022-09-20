@@ -13,68 +13,22 @@
                 <div class="col"></div>
             </div>
 
-<!--            <form method="post" action="/api/join">-->
-<!--              &lt;!&ndash; 이메일  &ndash;&gt;-->
-<!--              <div class="d-grid gap-2 col-3 mx-auto formStyle">-->
-<!--                <label for="email" class="form-label">이메일</label>-->
-<!--                <div class="input-group mb-3">-->
-<!--                  <input type="text" id="email" class="form-control" name="email" :value="getAuthEmail" placeholder="Email">-->
-<!--                  <button-->
-<!--                      class="btn btn-outline-primary"-->
-<!--                      type="button"-->
-<!--                      data-bs-toggle="modal"-->
-<!--                      data-bs-target="#emailModal">인증</button>-->
-<!--                </div>-->
-<!--              </div>-->
-
-
-<!--              &lt;!&ndash; 비밀번호 입력 &ndash;&gt;-->
-<!--              <div class="d-grid gap-2 col-3 mx-auto formStyle">-->
-<!--                <label for="password" class="form-label">비밀번호</label>-->
-<!--                <input type="password" id="password" class="form-control" name="mmbrPw" placeholder="Password">-->
-<!--              </div>-->
-
-
-<!--              &lt;!&ndash; 비밀번호 확인 &ndash;&gt;-->
-<!--              <div class="d-grid gap-2 col-3 mx-auto formStyle">-->
-<!--                <label for="password2" class="form-label">비밀번호 확인</label>-->
-<!--                <input type="password" id="password2" class="form-control" placeholder="Password Check">-->
-<!--              </div>-->
-
-
-<!--              &lt;!&ndash; 이름 입력 &ndash;&gt;-->
-<!--              <div class="d-grid gap-2 col-3 mx-auto formStyle">-->
-<!--                <label for="name" class="form-label">이름</label>-->
-<!--                <input type="text" id="name" class="form-control" name="mmbrName"  placeholder="Name">-->
-<!--              </div>-->
-
-
-<!--              &lt;!&ndash; 로그인 버튼 &ndash;&gt;-->
-<!--              <div class="d-grid gap-2 col-3 mx-auto" style="margin-bottom: 100px">-->
-
-<!--                <button class="btn btn-primary" type="submit" id="join" style="margin-top: 20px; background: #224CE6; border: 1px solid #224CE6; font-weight: 600">-->
-<!--                  회원가입-->
-<!--                </button>-->
-
-
-<!--                <router-link to="/" id="joinBtn">-->
-<!--                  홈으로-->
-<!--                </router-link>-->
-
-<!--              </div>-->
-<!--            </form>-->
-
-
             <!-- 이메일  -->
             <div class="d-grid gap-2 col-3 mx-auto formStyle">
               <label for="email" class="form-label">이메일</label>
               <div class="input-group mb-3">
-                <input type="text" @input="setJoinEmail" id="email" class="form-control" name="member.email" placeholder="Email">
-                <button
-                    class="btn btn-outline-primary"
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#emailModal">인증</button>
+                <input type="text" @input="setJoinEmail" id="email" class="form-control" name="member.email" placeholder="Email"  maxlength="50">
+
+                    <!-- 이메일 인증 모달 -->
+<!--                <button-->
+<!--                    class="btn btn-outline-primary"-->
+<!--                    type="button"-->
+<!--                    data-bs-toggle="modal"-->
+<!--                    data-bs-target="#emailModal">인증</button>-->
+
+                <button @click = "doubleCheck" class="btn btn-outline-primary" type="button">중복확인</button>
+
+
               </div>
             </div>
 
@@ -82,23 +36,22 @@
             <!-- 비밀번호 입력 -->
             <div class="d-grid gap-2 col-3 mx-auto formStyle">
               <label for="password" class="form-label">비밀번호</label>
-              <input type="password" @input="setJoinPassword" id="password" class="form-control" name="member.mmbrPw" placeholder="Password">
+              <input type="password" @input="setJoinPassword" id="password" class="form-control" name="member.mmbrPw" placeholder="Password" maxlength="16">
+              <p class="warningText" style="color: #224CE6">비밀번호 형식 : 8 ~ 16 자리, 영어, 숫자, 특수문자를 조합하여 사용</p>
+
+              <p class="warningText" v-if ="PW_CHECK(getMember.mmbrPw) === true" style="color: darkseagreen">사용 가능한 비밀번호</p>
+              <p class="warningText" v-else-if ="PW_CHECK(getMember.mmbrPw) === false" style="color: crimson">비밀번호 형식에 맞지 않습니다!</p>
             </div>
 
 
             <!-- 비밀번호 확인 -->
             <div class="d-grid gap-2 col-3 mx-auto formStyle">
               <label for="password2" class="form-label">비밀번호 확인</label>
-              <input type="password" id="password2" class="form-control" placeholder="Password Check">
+              <input type="password" @input="setJoinPasswordCheck" id="password2" class="form-control" placeholder="Password Check" maxlength="16">
+
+              <p class="warningText" v-if = "PW_COMPARE(getMember.mmbrPw , getMmbrPwCheck) === true" style="color: darkseagreen">비밀번호 일치!</p>
+              <p class="warningText" v-else-if = "PW_COMPARE(getMember.mmbrPw , getMmbrPwCheck) === false" style="color: crimson">비밀번호 불일치!</p>
             </div>
-
-
-<!--            &lt;!&ndash; 이름 입력 &ndash;&gt;-->
-<!--            <div class="d-grid gap-2 col-3 mx-auto formStyle">-->
-<!--              <label for="name" class="form-label">이름</label>-->
-<!--              <input type="text" @input="setJoinName" id="name" class="form-control" name="member.mmbrName"  placeholder="Name">-->
-<!--            </div>-->
-
 
             <!-- 로그인 버튼 -->
             <div class="d-grid gap-2 col-3 mx-auto" style="margin-bottom: 100px">
@@ -123,11 +76,20 @@
 import { mapGetters } from "vuex";
 
 export default {
-    name: "JoinPage",
+    name: "JoinPage"
+    ,
+    data() {
+      return {
+        formCheck: false,
+      }
+    }
+    ,
     computed: {
       ...mapGetters({
         getAuthEmail:"getAuthEmail",
-        getJoinPassword:"getJoinPassword"
+        getMember:"getMember",
+        getMmbrPwCheck: "getMmbrPwCheck",
+        joinCheck: "joinCheck"
       }),
 
     }
@@ -141,10 +103,22 @@ export default {
         this.$store.commit('setJoinPassword', e.target.value);
       }
       ,
-      setJoinName(e) {
-        this.$store.commit('setJoinName', e.target.value);
+      setJoinPasswordCheck(e) {
+        this.$store.commit('setJoinPasswordCheck', e.target.value);
       }
       ,
+
+      // 비밀번호 비교
+      PW_COMPARE: (pw, pwC) => {
+        if(pw === pwC) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      ,
+
       // 비밀번호 유효성 검사
       PW_CHECK: (e) => {
         const PWD_CHECK = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,16}$/
@@ -152,24 +126,31 @@ export default {
         console.log(e);
 
         if(!PWD_CHECK.test(e)) {
-          console.log('비밀번호 형식에 맞지 않습니다!')
-          console.log("input : " + e);
           return false;
         }
         else {
-          console.log('사용 가능한 비밀번호')
-          console.log("input : " + e);
           return true;
         }
       }
 
       ,
+      doubleCheck() {
+        this.$store.dispatch('doubleCheck');
+      }
+      ,
       joinAction() {
-        // let check = this.PW_CHECK(this.getJoinPassword);
-        // console.log(check);
+          this.$store.dispatch('joinAction')
 
-        this.$store.dispatch('joinAction')
-
+      }
+    }
+    ,
+    action: {
+      doubleCheck() {
+        this.$store.dispatch('doubleCheck');
+      }
+      ,
+      joinAction() {
+        this.$store.dispatch('joinAction');
       }
     }
 
@@ -206,6 +187,10 @@ export default {
 }
 #joinBtn:hover {
   text-decoration: cornflowerblue wavy underline;
+}
+
+#warningText {
+  font-size: 8px;
 }
 
 </style>

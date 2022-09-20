@@ -32,13 +32,23 @@ public class MainController {
 	 * resultType : String(Router)
 	 */
 	@PostMapping("/join")
-	public String joinMember(Member member) throws Exception {
-		
-		System.out.println(member);
-		memberService.join(member);
+	public void joinMember(Member member) throws Exception {
 
-		return "router.push({name: 'home'})";
+		memberService.join(member);
 	}
+
+	/**
+	 * 중복 확인
+	 * params : email
+	 * resultType : String(Router)
+	 */
+	@PostMapping("/doubleCheck")
+	public int doubleCheck(String email) throws Exception {
+
+		return memberService.doubleCheck(email);
+	}
+
+
 
 	/**
 	 * 로그인
@@ -66,13 +76,12 @@ public class MainController {
 	 * resultType : String(Router)
 	 */
 	@PostMapping("/logout")
-	public String logoutAction(HttpServletRequest request) throws Exception {
+	public void logoutAction(HttpServletRequest request) throws Exception {
 
 		HttpSession session = request.getSession();
 
 		session.invalidate();
 
-		return "router.push({name: 'home'})";
 	}
 
 	/**

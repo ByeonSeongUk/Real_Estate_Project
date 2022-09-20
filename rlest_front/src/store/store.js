@@ -27,6 +27,7 @@ export const store = new Vuex.Store({
         contract: '', // 계약 방법(전체, 전세, 월세)
         structure: '', // 방구조
         authEmail: '' // 인증용 이메일,
+
         , // 사용자
         member:[
             {
@@ -34,6 +35,16 @@ export const store = new Vuex.Store({
               , mmbrPw: ''
             }
         ]
+        ,
+        joinCheck: {
+            formCheck: false,
+            compareCheck: false,
+            blankCheck: false,
+            doubleCheck: false,
+        }
+        ,
+        // 회원가입시 비밀번호 확인
+        mmbrPwCheck: ''
         ,// 사용자 로그인시
         loginMember:[
             {
@@ -97,6 +108,7 @@ export const store = new Vuex.Store({
 
     // Getters
     getters: {
+
         // 로그인된 아이디
         getLoginId: (state) => {
             return state.loginId;
@@ -153,6 +165,21 @@ export const store = new Vuex.Store({
         ,
         getMember: (state) => {
             return state.member;
+        }
+        ,
+        // 회원가입시 비밀번호
+        getMmbrPw: (state) => {
+            return state.member.mmbrPw;
+        }
+        ,
+        // 회원가입시 비밀번호 확인
+        getMmbrPwCheck: (state) => {
+            return state.mmbrPwCheck;
+        }
+        ,
+        // 회원가입시 입력값 체크
+        joinCheck: (state) => {
+            return state.joinCheck;
         }
         ,
         // 불러온 매물 리스트
@@ -266,6 +293,31 @@ export const store = new Vuex.Store({
             state.member.mmbrPw = password;
         }
         ,
+        // 회원가입시 비밀번호 확인
+        setJoinPasswordCheck: (state, mmbrPwCheck) => {
+            state.mmbrPwCheck = mmbrPwCheck;
+        }
+        ,
+
+        // 회원가입시 체크 항목들
+        joinCompareCheck: (state, compareCheck) => {
+            state.joinCheck.compareCheck = compareCheck;
+        }
+        ,
+        joinFormCheck: (state, formCheck) => {
+            state.joinCheck.formCheck = formCheck;
+        }
+        ,
+        joinBlankCheck: (state, blankCheck) => {
+            state.joinCheck.blankCheck = blankCheck;
+        }
+        ,
+        joinDoubleCheck: (state, doubleCheck) => {
+            state.joinCheck.doubleCheck = doubleCheck;
+        }
+        ,
+        /// ---
+
         // 로그인시 아이디(이메일)
         setLoginEmail: (state, email) => {
             state.loginMember.email = email;
@@ -348,8 +400,10 @@ export const store = new Vuex.Store({
             const params = new URLSearchParams();
 
 
-            // 비밀번호 유효성 검사
-            if(PWD_CHECK.test(state.member.mmbrPw)) {
+            // 비밀번호 유효성 검사, 비교값, 아이디 중복확인까지 되야지 회원가입 처리
+            if(PWD_CHECK.test(state.member.mmbrPw)
+                && state.joinCheck.doubleCheck
+                && state.mmbrPwCheck === state.member.mmbrPw) {
 
                 params.append('email', state.member.email);
                 params.append('mmbrPw', state.member.mmbrPw);
@@ -357,17 +411,48 @@ export const store = new Vuex.Store({
                 axios.post('/join', params)
                     .then(res => {
                         commit(res.data)
-                        router.push({name: 'home'})
+                        router.push({name: 'login'})
                     })
                     .catch((err) => {
                         console.log(err);
                     });
             }
             else{
-                alert('비밀번호 다시 입력!');
+                alert('아이디와 비밀번호를 형식에 맞게 작성 해주세요!(이메일 중복검사, 비밀번호 형식 확인!)');
             }
 
+        },
+        // 아이디 검사
+        doubleCheck: ({commit, state}) => {
+            // 이메일 유효성 검사
+            const ID_CHECK = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+            const params = new URLSearchParams();
+
+            if(ID_CHECK.test(state.member.email)) {
+            params.append('email', state.member.email);
+
+            axios.post('doubleCheck', params)
+                 .then(res => {
+                     if(res.data == 1) {
+                         commit('joinDoubleCheck', false);
+                         alert("중복된 아이디! 다시 입력해주세요!");
+                     }
+                     else {
+                         commit('joinDoubleCheck', true)
+                         alert("중복되지 않은 아이디! 사용 가능!");
+                     }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+            }
+            else {
+                alert("이메일을 형식에 맞게 입력해주세요!");
+            }
         }
+
+
         ,
         // 로그아웃 요청
         logoutAction: ({commit, state}) => {
@@ -385,6 +470,8 @@ export const store = new Vuex.Store({
                  });
         }
         ,
+
+
         // 로그인 요청
         loginAction: ({commit, state}) => {
 
@@ -401,7 +488,6 @@ export const store = new Vuex.Store({
                     state.loginCheck = 0;
                     let splitStr = res.data.split('@');
 
-                    console.log(splitStr);
                     state.loginId = splitStr[0]; // 로그인 된 아이디가 들어옴
 
                     router.push({name: 'home'})
@@ -447,7 +533,6 @@ export const store = new Vuex.Store({
                     }
                 })
                 .then(res  => {
-                    console.log(res)
                     commit('setRlestList', res.data.list)
                     commit('setPaging', res.data.paging)
                 })
@@ -498,7 +583,7 @@ export const store = new Vuex.Store({
         }
         ,
         // 위시리스트 추가, 삭제
-        wishListCtrDel: ({commit, state}) => {
+        wishListCtrDel: ({state}) => {
 
             const params = new URLSearchParams();
             params.append('rlestNum', state.clickRlestNumber);
@@ -512,12 +597,10 @@ export const store = new Vuex.Store({
                     }
                     else if(res.data == 1) {
                         alert('위시리스트에 추가 완료!');
-                        commit('setWishListState', 1);
 
                     }
                     else if(res.data == 2) {
                         alert('위시리스트에서 삭제 완료!');
-                        commit('setWishListState', 0)
                     }
                 })
                 .catch((err) => {
@@ -592,12 +675,6 @@ export const store = new Vuex.Store({
                 }
             })
                 .then(res => {
-                    // let optionBox = new Array;
-                    //
-                    // for(let i = 0; i < res.data.length; i++) {
-                    //     optionBox.push(res.data[i].optNum);
-                    // }
-                    // commit('setAboutOptions', optionBox);
                     commit('setAboutOptions', res.data);
                 })
                 .catch((err) => {

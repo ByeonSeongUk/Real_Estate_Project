@@ -23,7 +23,6 @@
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><router-link class="dropdown-item dropdown-style" to="/">방 찾기</router-link></li>
                             <li><router-link class="dropdown-item dropdown-style" to="/myList">찜한 매물</router-link></li>
-                            <li><router-link class="dropdown-item dropdown-style" to="/registration">방 내놓기&#40;전월세만&#41;</router-link></li>
                         </ul>
                     </div>
                 </li>

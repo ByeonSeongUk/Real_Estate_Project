@@ -2,7 +2,6 @@
 <template>
     <div id="WishList">
         <div class="oneroomImg">
-<!--            <img :src="require(`@/assets/images/orImg${getELEST.rlest_num}.jpeg`)" alt="원룸사진"/>-->
         </div>
 
         <div class="oneroomInfo" @click="setClickRlestNumber(getWishList.rlestNum)">

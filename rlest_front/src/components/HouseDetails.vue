@@ -70,7 +70,7 @@
 
             <div class="col">
               <h4>구조</h4>
-              <p>{{ getRlestDetail[0].structure }}&#160;원룸</p>
+              <p>{{ getRlestDetail[0].structure }}</p>
             </div>
           </div>
 
@@ -304,7 +304,6 @@ export default {
     created() {
       this.wishListCheck();
       this.aboutOptions();
-      console.log('created :' + this.getRlestDetail[0].rlestAdr);
       this.setDetailPointer(this.getRlestDetail[0].rlestAdr);
     }
 

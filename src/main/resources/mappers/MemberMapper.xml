@@ -31,6 +31,14 @@
         )
     </insert>
 
+    <!-- 이메일 중복 확인 -->
+    <select id="doubleCheck" parameterType="String" resultType="int">
+      /* [MemberMapper.xml] [doubleCheck] [아이디 중복확인] */
+      SELECT count(email)
+        FROM MEMBER
+       WHERE email = #{email}
+    </select>
+
     <!-- 로그인 처리 -->
     <select id="login" parameterType="Member" resultType="Member">
         /* [MemberMapper.xml] [login] [로그인 처리] */

@@ -13,16 +13,15 @@ public class MemberServiceImpl implements MemberService {
 
 	@Autowired
 	MemberDAO memberDAO;
-	
-	@Override
-	public List<Member> getMemberList() throws Exception {
-		
-		return memberDAO.getMemberList();
-	}
 
 	@Override
 	public void join(Member member) throws Exception {
 		memberDAO.join(member);
+	}
+
+	@Override
+	public int doubleCheck(String email) throws Exception {
+		return memberDAO.doubleCheck(email);
 	}
 
 	@Override

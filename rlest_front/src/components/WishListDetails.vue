@@ -10,13 +10,13 @@
 
           <div class="row detailBar">
             <div class="col-2">
-              <a @click="goBack" href="#"><img id="backBtn" src="../assets/images/backBtn.png" alt="backBtn"/></a>
+              <a @click="goBack"><img id="backBtn" src="../assets/images/backBtn.png" alt="backBtn"/></a>
             </div>
             <div class="col-8">
               <h4 id="detailHeader">{{ getWishListDetail[0].rlestAdr }}</h4>
             </div>
             <div class="col-2">
-              <a href=""><img id="unitBtn" src="../assets/images/unitChangeBtn.png" alt="unitChangeBtn"/></a>
+<!--              <a><img id="unitBtn" src="../assets/images/unitChangeBtn.png" alt="unitChangeBtn"/></a>-->
             </div>
           </div>
 
@@ -44,8 +44,8 @@
 
             <!-- 위시리스트 -->
             <div class="col-2 wishList">
-              <a @click="wishListCtrDel" v-if="getWishListState == 1" href="#"><i class="fa-solid fa-heart"></i></a>
-              <a @click="wishListCtrDel" v-if="getWishListState == 0" href="#"><i class="fa-regular fa-heart"></i></a>
+              <a @click="wishListCtrDel" v-if="getWishListState == 1"><i class="fa-solid fa-heart"></i></a>
+              <a @click="wishListCtrDel" v-if="getWishListState == 0"><i class="fa-regular fa-heart"></i></a>
             </div>
 
             <p>등록번호&#160;&#58;&#160;{{ getWishListDetail[0].rlestNum }}</p>

@@ -11,5 +11,7 @@ public interface MemberDAO {
 	public Member login(Member member) throws Exception;
 	
 	public void join(Member member) throws Exception;
+
+	public int doubleCheck(String email) throws Exception;
 	
 }

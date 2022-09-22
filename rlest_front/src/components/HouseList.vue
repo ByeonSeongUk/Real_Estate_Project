@@ -1,8 +1,10 @@
 <!-- 매물 컴포넌트 -->
 <template>
     <div id="HouseList" @click="setClickRlestNumber(getRlestListAll.rlestNum)">
+
         <div class="oneroomImg">
-<!--            <img :src="require(`@/assets/images/orImg${getELEST.rlest_num}.jpeg`)" alt="원룸사진"/>-->
+<!--            <img :src="require(`@/assets/images/orImg14010222`)" alt="원룸사진"/>-->
+            <img src="../assets/images/orImg14010222.jpeg" alt="원룸사진"/>
         </div>
 
         <div class="oneroomInfo">
@@ -15,7 +17,7 @@
           <h4 v-else class="info_header">{{ getRlestListAll.rlestSort }}&#160;{{ numberToKorean(getRlestListAll.deposit) }}&#160;&#47;&#160;{{ numberToKorean(getRlestListAll.monthlyRent) }}</h4>
           <p class="info_content">{{ getRlestListAll.roomArea}}m², {{ getRlestListAll.floor }} 층</p>
           <p class="info_content">{{ getRlestListAll.rlestAdr }}</p>
-          <p class="info_content">{{ getRlestListAll.rlestIntro }}</p>
+          <p class="info_content" stlye="width: 230px">{{ getRlestListAll.rlestIntro }}</p>
         </div>
     </div>
 </template>
@@ -86,7 +88,9 @@ export default {
 
 <style scoped>
 #HouseList {
-    display: flex;
+    display: inline-flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
     width: 100%;
     height: auto;
     padding: 10px 18px;
@@ -98,7 +102,6 @@ export default {
 }
 
 #HouseList .oneroomImg {
-    display: block;
     width: 150px;
     height: 120px;
     margin-right: 3%;
@@ -111,7 +114,6 @@ export default {
 }
 
 #HouseList .oneroomInfo {
-    display: block;
     width: 80%;
     height: 100%;
 }
@@ -124,6 +126,8 @@ export default {
 }
 
 .info_content {
+    display: block;
+    width: 230px;
     font-size: 0.8rem;
     margin: 3px 0 0 0;
     overflow: hidden;

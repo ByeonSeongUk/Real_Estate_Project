@@ -10,11 +10,11 @@
           <h2 style="font-size: 1.2rem; text-align: center; padding: 30px 0">조건에 만족하는 매물이 없습니다!</h2>
         </div>
 
-        <div  v-if="getRlestListAll.length != 0" class="row" style="padding-top: 20px;">
+        <div  v-if="getRlestListAll.length != 0" class="row" style="padding-top: 20px; margin-left: 0; margin-right: 0;">
           <div class="col-2"></div>
           <div class="col-8">
             <nav aria-label="Page navigation example">
-              <ul class="pagination"  style="justify-content: center; text-align: center">
+              <ul class="pagination"  style="justify-content: center; text-align: center;">
 
                 <li class="page-item">
                   <a @click="setCurrentPage(getPaging.before == 0 ? Math.floor(getPaging.count / getPaging.offset) + 1 : getPaging.before)" class="page-link" aria-label="Previous">

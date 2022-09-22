@@ -108,7 +108,20 @@ export const store = new Vuex.Store({
 
     // Getters
     getters: {
-
+        // 로그인창에서 입력 받은 값
+        getLoginEmail: (state) => {
+            return state.loginMember.email;
+        }
+        ,
+        // 로그인창에서 입력 받은 값
+        getLoginPw: (state) => {
+            return state.loginMember.mmbrPw;
+        }
+        ,
+        getLoginMember: (state) => {
+            return state.loginMember;
+        }
+        ,
         // 로그인된 아이디
         getLoginId: (state) => {
             return state.loginId;
@@ -483,15 +496,20 @@ export const store = new Vuex.Store({
 
             axios.post('/login', params)
                 .then(res => {
+                    console.log(res.data)
+                    if(res.data != false) {
+                        commit(res.data)
+                        state.loginCheck = 0;
 
-                    commit(res.data)
-                    state.loginCheck = 0;
-                    let splitStr = res.data.split('@');
+                        let splitStr = res.data.split('@');
 
-                    state.loginId = splitStr[0]; // 로그인 된 아이디가 들어옴
+                        state.loginId = splitStr[0]; // 로그인 된 아이디가 들어옴
 
-                    router.push({name: 'home'})
-
+                        router.push({name: 'home'})
+                    }
+                    else {
+                        alert('로그인 실패! 아이디 또는 비밀번호를 확인바랍니다!');
+                    }
                 })
                 .catch((err) => {
                     alert('회원정보 불일치!');

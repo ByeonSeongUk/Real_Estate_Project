@@ -53,20 +53,28 @@ public class MainController {
 	/**
 	 * 로그인
 	 * params : member.email, member.mmbrPw
-	 * resultType : String(Router)
+	 * resultType : String
 	 */
 	@PostMapping("/login")
 	public String loginAction(Member member, HttpServletRequest request) throws Exception {
 
 		HttpSession session = request.getSession();
 
-		memberService.login(member);
+		Member memberData = memberService.login(member);
 
 		session.setAttribute("LOGIN_MEMBER", member.getEmail());
 
 		String email = (String) session.getAttribute("LOGIN_MEMBER");
+		System.out.println(memberData);
+		if(memberData != null) {
+			// 로그인 성공시
+			return email;
+		}
+		else {
+			// 로그인 실패시
+			return "0";
+		}
 
-		return email;
 	}
 
 

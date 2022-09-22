@@ -18,13 +18,12 @@
 
             <!-- 아이디 입력 -->
             <div class="d-grid gap-2 col-3 mx-auto">
-              <input @input="setLoginEmail" type="text" name="loginMember.email" class="form-control" id="exampleFormControlInput1" placeholder="ID">
+              <input @input="setLoginEmail" value="" type="text" name="loginMember.email" class="form-control" id="exampleFormControlInput1" placeholder="ID">
             </div>
-
 
             <!-- 비밀번호 입력 -->
             <div class="d-grid gap-2 col-3 mx-auto" style="margin-top: 10px">
-              <input @input="setLoginPassword" type="password" name="loginMember.mmbrPw" class="form-control" id="exampleFormControlInput1" placeholder="Password">
+              <input @input="setLoginPassword" value="" type="password" name="loginMember.mmbrPw" class="form-control" id="exampleFormControlInput1" placeholder="Password">
             </div>
 
 
@@ -46,9 +45,20 @@
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
     name: "LoginPage"
     ,
+    computed: {
+      ...mapGetters({
+        getLoginMember: 'getLoginMember',
+        getLoginEmail: 'getLoginEmail',
+        getLoginPw: 'getLoginPw'
+      })
+    }
+    ,
+
     methods: {
       setLoginEmail(e) {
         this.$store.commit('setLoginEmail', e.target.value);

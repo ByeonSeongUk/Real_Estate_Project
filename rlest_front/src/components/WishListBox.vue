@@ -7,16 +7,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
 import WishList from "@/components/WishList";
 
 export default {
   name: "WishListBox",
 
   computed:
-    mapGetters({
-      getWishList: 'getWishList'
-    }),
+      mapGetters({
+        getWishList: 'getWishList'
+      }),
 
   components: {
     WishList

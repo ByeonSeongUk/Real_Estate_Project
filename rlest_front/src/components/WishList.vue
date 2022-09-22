@@ -2,6 +2,7 @@
 <template>
     <div id="WishList">
         <div class="oneroomImg">
+          <img src="../assets/images/orImg14010222.jpeg"/>
         </div>
 
         <div class="oneroomInfo" @click="setClickRlestNumber(getWishList.rlestNum)">

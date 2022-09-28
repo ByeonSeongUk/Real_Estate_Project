@@ -1,12 +1,13 @@
 package com.rlest.dao;
 
+import java.util.HashMap;
+import java.util.List;
+
 import com.rlest.domain.AboutOptions;
 import com.rlest.domain.Paging;
 import com.rlest.domain.RealEstate;
+import com.rlest.domain.RoomImgs;
 import com.rlest.domain.WishList;
-
-import java.util.HashMap;
-import java.util.List;
 
 public interface RlestDAO {
 
@@ -39,4 +40,7 @@ public interface RlestDAO {
 
     // 옵션 불러오기
     public List<AboutOptions> getAboutOptions(Integer rlestNum) throws Exception;
+    
+    // 사진 불러오기(매물 상세)
+    public List<RoomImgs> getDetailImgs(Integer rlestNum) throws Exception;
 }

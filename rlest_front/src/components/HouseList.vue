@@ -41,7 +41,6 @@ export default {
     methods: {
 
         setClickRlestNumber(e) {
-          console.log(e);
           this.$store.commit('setClickRlestNumber', e)
         }
         ,

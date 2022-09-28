@@ -90,7 +90,11 @@ export const store = new Vuex.Store({
         paging: []
         ,
         //////////////////////////////// Test ///////////////////////////////
-        currentIndex: 0,
+        currentIndex: 0
+        ,
+        // 방 사진 목록
+        roomImgs: []
+        ,
         oneroomsImgs: [
             {title:'대표사진', url: require('../assets/images/oneroomImg1.png')},
             {title:'화장실',  url: require('../assets/images/oneroomImg2.png')},
@@ -169,7 +173,7 @@ export const store = new Vuex.Store({
         ,
         // 이미지 슬라이더 출력값
         getCurrentImg: (state) => {
-            return state.oneroomsImgs[Math.abs(state.currentIndex) % state.oneroomsImgs.length].url;
+            return state.roomImgs[Math.abs(state.currentIndex) % state.roomImgs.length];
         }
         ,
         getAuthEmail: (state) => {
@@ -212,25 +216,21 @@ export const store = new Vuex.Store({
         ,
         // 사용자의 위시리스트 불러오기
         getWishList: (state) => {
-            console.log(state.wishList);
             return state.wishList;
         }
         ,
         // 사용자의 위시리스트 상세
         getWishListDetail: (state) => {
-            console.log(state.wishListDetail);
             return state.wishListDetail
         }
         ,
         // 해당매물의 옵션
         getAboutOptions: (state) => {
-            console.log(state.aboutOptions);
             return state.aboutOptions;
         }
         ,
         // 지도 마커
         getDetailPointer: (state) => {
-            console.log(state.detailPointer);
             return state.detailPointer;
         }
         ,
@@ -244,7 +244,11 @@ export const store = new Vuex.Store({
             return state.paging
         }
         ,
-
+        // 불러온 사진의 이름 정보(매물 상세)
+        getDetailImgs: (state) => {
+            return state.roomImgs
+        }
+        
 
     }
     ,
@@ -348,39 +352,32 @@ export const store = new Vuex.Store({
         ,
         // 클릭한 매물의 매물 번호
         setClickRlestNumber: (state, clickRlestNumber) => {
-            console.log(clickRlestNumber);
             state.clickRlestNumber = clickRlestNumber;
         }
         ,
         // 매물 상세 불러오기
         setRlestDetail: (state, rlestDetail) => {
-            console.log(rlestDetail);
             state.rlestDetail = rlestDetail;
         }
         ,
         // DB에서 불러온 위시 리스트 저장
         setWishList: (state, wishList) => {
-            console.log(wishList);
             state.wishList = wishList;
         }
         ,
         // 클릭한 위시리스트 상세 불러오기
         setWishListDetail: (state, wishListDetail) => {
-            console.log(wishListDetail);
             state.wishListDetail = wishListDetail;
         }
         ,
         // 해당 매물의 옵션
         setAboutOptions: (state, aboutOptions) => {
-            console.log(aboutOptions);
             state.aboutOptions = aboutOptions;
         }
         ,
         // 지도 마커
         setDetailPointer: (state, detailPointer) => {
-            console.log('store: ' + detailPointer);
             state.detailPointer = detailPointer;
-            console.log(state.detailPointer)
         }
         ,
         // 불러온 총 페이지의 개수
@@ -396,6 +393,11 @@ export const store = new Vuex.Store({
         // 현재 페이지 번호 (Vue에서 받아오는 값)
         setCurrentPage: (state, currentPage) => {
             state.currentPage = currentPage;
+        }
+        ,
+        // 불러온 상세 이미지 넣기
+        setDetailImgs: (state, detailImgs) => {
+            state.roomImgs = detailImgs;
         }
 
     }
@@ -524,15 +526,12 @@ export const store = new Vuex.Store({
                 .then(res => {
 
                     if(res.data == 1) {
-                        console.log("1");
                         state.loginCheck = res.data; // 로그인이 안되어 있으면 1이 들어옴
                     }
                     else {
-                        console.log("0");
                         state.loginCheck = 0;
                         let splitStr = res.data.split('@');
 
-                        console.log(splitStr);
                         state.loginId = splitStr[0]; // 로그인 된 아이디가 들어옴
                     }
 
@@ -568,7 +567,6 @@ export const store = new Vuex.Store({
                     }
                  })
                  .then(res  => {
-                    console.log('axios : ' + res.data)
                     commit('setRlestDetail', res.data)
                     router.push({name: 'detail'})
                 })
@@ -591,7 +589,6 @@ export const store = new Vuex.Store({
                 }
             })
                 .then(res  => {
-                    console.log(res)
                     commit('setRlestList', res.data.list)
                     commit('setPaging', res.data.paging)
                 })
@@ -608,7 +605,6 @@ export const store = new Vuex.Store({
 
             axios.post('rlest/wishListCtrDel',params)
                 .then(res  => {
-                    console.log('axios : ' + res.data)
                     if(res.data == 0) {
                         alert('로그인 후 진행해주세요!');
                         router.push({name: 'login'});
@@ -631,11 +627,9 @@ export const store = new Vuex.Store({
 
             const params = new URLSearchParams();
             params.append('rlestNum', state.clickRlestNumber);
-            console.log(params);
 
             axios.post('rlest/wishListCheck',params)
                 .then(res  => {
-                    console.log('axios wish: ' + res.data);
                     commit('setWishListState', res.data);
                 })
                 .catch((err) => {
@@ -674,9 +668,7 @@ export const store = new Vuex.Store({
                 }
             })
                 .then(res  => {
-                    console.log('axios : ' + res.data)
                     commit('setWishListDetail', res.data)
-                    console.log(state.wishListDetail)
                     router.push({name: 'wlDetail'})
                 })
                 .catch((err) => {
@@ -686,7 +678,7 @@ export const store = new Vuex.Store({
         ,
         // 상세페이지 옵션 정보 불러오기
         aboutOptions: ({commit, state}) => {
-            console.log('test test tes t : ' + state.clickRlestNumber)
+            
             axios.get('rlest/getAboutOptions', {
                 params: {
                     rlestNum: state.clickRlestNumber
@@ -699,7 +691,33 @@ export const store = new Vuex.Store({
                     console.log(err)
                 });
         }
+        ,
+        // 매물상세 이미지 불러오기
+        detailImgs: ({commit, state}) => {
+
+            
+
+            axios.get('rlest/getDetailImgs', {
+                params: {
+                    rlestNum: state.clickRlestNumber
+                }
+            })
+                .then(res => {
+
+                    let imgBox = new Array();
+
+                    for(let i = 0; i < res.data.length; i++) {
+                        imgBox.push(res.data[i].fileName);
+                    }
+
+                    commit('setDetailImgs', imgBox);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        }
+
+        
+
     }
-
-
 })

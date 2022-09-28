@@ -230,6 +230,24 @@
             ON ao.opt_num = o.opt_num
          WHERE rlest_num = #{rlestNum};
     </select>
+    
+    
+    <!-- 매물의 사진 들고오기(상세) -->
+    <select id="getDetailImgs" parameterType="int" resultType="RoomImgs">
+    	SELECT img_num
+         	 , rlest_num
+         	 , file_real_name
+         	 , file_name
+         	 , ctr_id
+         	 , upd_id
+          FROM room_imgs
+         WHERE rlest_num = #{rlestNum}
+    </select>
+    
+    <!-- 매물의 리스트 사진 들고오기
+    <select id="getDetailsImgs" parameterType="int" resultType="RoomImgs">
+    
+    </select> -->
 </mapper>
 
 

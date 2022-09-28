@@ -4,6 +4,7 @@ import com.rlest.dao.RlestDAO;
 import com.rlest.domain.AboutOptions;
 import com.rlest.domain.Paging;
 import com.rlest.domain.RealEstate;
+import com.rlest.domain.RoomImgs;
 import com.rlest.domain.WishList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,5 +86,10 @@ public class RlestServiceImpl implements RlestService {
 	@Override
 	public List<AboutOptions> getAboutOptions(Integer rlestNum) throws Exception {
 		return RlestDAO.getAboutOptions(rlestNum);
+	}
+
+	@Override
+	public List<RoomImgs> getDetailImgs(Integer rlestNum) throws Exception {
+		return RlestDAO.getDetailImgs(rlestNum);
 	}
 }

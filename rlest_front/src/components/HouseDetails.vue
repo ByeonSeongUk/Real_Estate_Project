@@ -21,7 +21,8 @@
 
           <!-- 이미지 -->
           <div class="row">
-            <img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="../assets/images/orImg24824824.jpeg"/>
+            <!--<img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="../assets/images/orImg24824824.jpeg"/>-->
+            <img data-bs-toggle="modal" data-bs-target="#imgModal" id="mainImg" src="@/assets/images/20220927123940572_test_Image.png"/>
           </div>
 
           <!-- 거래 상태 / 등록일 -->
@@ -265,6 +266,11 @@ export default {
         return resultString;
       }
       ,
+      // 현재 보고 있는 상세페이지의 매물 주소로 지도를 이동
+      setDetailPointer(e) {
+        this.$store.commit('setDetailPointer', e);
+      }
+      ,
       // 위시리스트 추가, 삭제
       wishListCtrDel() {
         this.$store.dispatch('wishListCtrDel')
@@ -280,10 +286,9 @@ export default {
         this.$store.dispatch('aboutOptions')
       }
       ,
-      // 현재 보고 있는 상세페이지의 매물 주소로 지도를 이동
-      setDetailPointer(e) {
-        console.log('상세페이지 : ' + e);
-        this.$store.commit('setDetailPointer', e);
+      // 불러온 매물의 상세 이미지
+      detailImgs() {
+        this.$store.dispatch('detailImgs')
       }
     }
     ,
@@ -299,9 +304,15 @@ export default {
       aboutOptions() {
         this.$store.dispatch('aboutOptions')
       }
+      ,
+      detailImgs() {
+        this.$store.dispatch('detailImgs')
+      }
+
     }
     ,
     created() {
+      this.detailImgs();
       this.wishListCheck();
       this.aboutOptions();
       this.setDetailPointer(this.getRlestDetail[0].rlestAdr);

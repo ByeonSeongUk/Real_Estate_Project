@@ -2,7 +2,6 @@
 
   <div>
     <div id="map"></div>
-<!--\-->
   </div>
 </template>
 
@@ -43,7 +42,6 @@ export default {
   // state의 매물의 주소가 변할때마다 마커 주소 이동
   watch: {
     getDetailPointer: function() {
-      console.log('watcher')
       this.detailMarker(this.getDetailPointer);
     }
   }
@@ -67,7 +65,7 @@ export default {
 
       // 주소-좌표 변환 객체를 생성
       this.geocoder = new kakao.maps.services.Geocoder();
-      console.log(this.geocoder.addressSearch)
+
       // 주소로 좌표를 검색합니다
       this.geocoder.addressSearch(this.getDetailPointer, function (result, status) {
         // console.log(status);
@@ -137,7 +135,7 @@ export default {
 
       // 주소-좌표 변환 객체를 생성
       this.geocoder = new kakao.maps.services.Geocoder();
-      console.log(this.geocoder.addressSearch)
+
       // 주소로 좌표를 검색합니다
       this.geocoder.addressSearch(e, function(result, status) {
         // console.log(status);

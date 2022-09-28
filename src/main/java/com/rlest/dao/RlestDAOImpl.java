@@ -1,7 +1,7 @@
 package com.rlest.dao;
 
 import com.rlest.domain.*;
-import com.rlest.domain.Paging;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -66,4 +66,11 @@ public class RlestDAOImpl implements RlestDAO {
 	public List<AboutOptions> getAboutOptions(Integer rlestNum) throws Exception {
 		return sql.selectList(NAMESPACE + ".getAboutOptions", rlestNum);
 	}
+
+	@Override
+	public List<RoomImgs> getDetailImgs(Integer rlestNum) throws Exception {
+		return sql.selectList(NAMESPACE + ".getDetailImgs", rlestNum);
+	}
+	
+	
 }

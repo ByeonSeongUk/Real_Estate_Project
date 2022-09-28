@@ -1,22 +1,23 @@
 package com.rlest.controller;
-// 매물 컨트롤러
-import com.rlest.domain.AboutOptions;
-import com.rlest.domain.Paging;
-import com.rlest.domain.RealEstate;
-import com.rlest.domain.WishList;
-import com.rlest.service.RlestService;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
+// 매물 컨트롤러
+import com.rlest.domain.AboutOptions;
+import com.rlest.domain.RealEstate;
+import com.rlest.domain.RoomImgs;
+import com.rlest.domain.WishList;
+import com.rlest.service.RlestService;
 
 @RestController
 @RequestMapping(value = "/rlest", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -162,5 +163,20 @@ public class RlestController {
 	public List<AboutOptions> getAboutOptions(Integer rlestNum) throws Exception {
 		System.out.println(rlestService.getAboutOptions(rlestNum));
 		return rlestService.getAboutOptions(rlestNum);
+	}
+	
+
+	/**
+	 * 매물에 해당하는 사진 불러오기 (매물상세)
+	 * params : Int rlestNum
+	 * resultType : List<RoomImgs>
+	 */
+	@GetMapping("/getDetailImgs")
+	public List<RoomImgs> getDetailImgs(Integer rlestNum) throws Exception {
+		
+		System.out.println(rlestNum);
+		System.out.println(rlestService.getDetailImgs(rlestNum));
+		
+		return rlestService.getDetailImgs(rlestNum);
 	}
 }

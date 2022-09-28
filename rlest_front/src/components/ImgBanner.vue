@@ -4,7 +4,7 @@
     <a @click="setPrevImg"><i class="fa-solid fa-chevron-left" id="leftBtn"/></a>
       <transition-group  name="fade" tag="div" mode="in-out" id="imgListBox">
         <div v-for="(a, i) in [getCurrentIndex]" :key="i" class="imgList">
-          <img :src="getCurrentImg" :alt="'매물이미지' + {i}"/>
+          <img :src="srcChg(getCurrentImg)" :alt="'매물이미지' + {i}"/>
         </div>
       </transition-group>
     <a @click="setNextImg"><i class="fa-solid fa-chevron-right" id="rightBtn"/></a>
@@ -16,25 +16,26 @@ import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: "ImgBanner",
-  data : ()=> ({
-    currentIndex: 1,
-
-})
-  ,
 
   computed : {
     ...mapGetters({
       getCurrentIndex: 'getCurrentIndex',
       getCurrentImg: 'getCurrentImg'
     })
+
   }
   ,
-  methods : {
+  methods : {   
     ...mapMutations({
       setPrevImg: 'setPrevImg',
       setNextImg: 'setNextImg',
     })
-  },
+    ,
+    srcChg(fileNameArr) {
+      return require('../assets/images/' + fileNameArr);
+    }
+  }
+  ,
 
 }
 </script>
